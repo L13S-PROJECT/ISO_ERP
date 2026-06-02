@@ -1,0 +1,145 @@
+@* ProductionPrint.razor *@
+
+@using ISO_ERP.Models
+
+<div class="production-print-wrapper">
+
+    
+
+    @foreach (var item in Productions)
+{
+
+    <div class="print-page">
+
+        <div class="form-top-header">
+            SIA "FMM" | Veidlapa V-1 | Versija 1.0 | 29.08.2025
+        </div>
+
+        <div class="print-header">
+            <h3>Ražošanas kvalitātes kontroles protokols (FCP)</h3>
+        </div>
+
+            <div class="print-date-row">
+
+                <div class="print-date-label">
+                    Datums
+                </div>
+
+                <div class="print-date-value">
+                    @item.StartDate?.ToString("dd.MM.yyyy")
+                </div>
+
+            </div>
+
+        <div class="production-info-table">
+
+            <div class="production-info-head">Ražošanas kods</div>
+            <div class="production-info-head">Kausa kods</div>
+            <div class="production-info-head">Skaits</div>
+            <div class="production-info-head">Rasējuma Nr.</div>
+            <div class="production-info-head">Pabeigts</div>
+            <div class="production-info-head">Pārbaudīja</div>
+
+            <div class="production-info-value">@item.BatchNo</div>
+            <div class="production-info-value">@item.ProductCode</div>
+            <div class="production-info-value">@item.Quantity</div>
+            <div class="production-info-value"></div>
+            <div class="production-info-value"></div>
+            <div class="production-info-value"></div>
+
+        </div>
+
+        <div class="print-notes-lines">
+
+            <div class="print-note-line"></div>
+            <div class="print-note-line"></div>
+            <div class="print-note-line"></div>
+
+        </div>
+
+        <div class="print-section">
+
+            <h4>DETAĻU KOMPLEKTS - I posms</h4>
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <th>Datums</th>
+                        <th>Komplekts</th>
+                        <th>Paraksts</th>
+                        <th>Piezīmes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <tr>
+                            <td style="height:40px;"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="welding-section">
+
+                <h4>METINĀŠANA - II posms</h4>
+
+                <table class="welding-table">
+
+                    <thead>
+                        <tr>
+                            <th>Nr.</th>
+                            <th>Metināmā detaļa</th>
+                            <th>Metinātājs (Uzvārds)</th>
+                            <th>Iesākts</th>
+                            <th>Pabeigts</th>
+                            <th>Paraksts</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @for (int i = 0; i < 8; i++)
+                        {
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="print-footer">
+                Lapa 1 no 2
+            </div>
+
+    </div>
+}
+
+</div>
+
+@code {
+
+    [Parameter]
+    public List<Production> Productions { get; set; } = new();
+
+    
+}

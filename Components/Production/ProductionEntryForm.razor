@@ -1,0 +1,588 @@
+@* ProductionEntryForm.razor *@
+@using ISO_ERP.Models
+@using ISO_ERP.Components.Common
+@using Microsoft.AspNetCore.Components.Web
+
+@inject IJSRuntime JS
+
+<div class="erp-entry-panel"
+     tabindex="0"
+     @onkeydown="HandleEscape">
+
+    <div class="erp-entry-header">
+        @(IsEditMode
+            ? "Jauna ražošanas partija - LABOJUMS"
+            : "Jauna ražošanas partija")
+    </div>
+
+
+<div class="production-form-grid">
+
+    <div>
+        <label>Raž.Nr.</label>
+
+        <input class="@BatchNoClass"
+                disabled="@IsEditMode"
+               value="@NewProduction.BatchNo"
+               @oninput="OnBatchNoChanged" />
+
+        @if (invalidBatchNo)
+        {
+            <div class="invalid-feedback d-block">
+                Ievadi ražošanas numuru
+            </div>
+        }
+    </div>
+
+    <div class="position-relative">
+        <label>Produkta nosaukums</label>
+
+        <input id="productInput"
+                @ref="productInput"
+                class="form-control @(invalidProduct ? "is-invalid" : "")"
+                title="@NewProduction.ProductName"
+               value="@NewProduction.ProductName"
+               disabled="@IsEditMode"
+               @oninput="FilterProducts"
+               @onkeydown="HandleProductKeyDown" />
+        
+        @if (emptyProduct)
+                {
+                    <div class="invalid-feedback d-block">
+                        Aizpildi produkta lauku
+                    </div>
+                }
+                else if (invalidProduct)
+                {
+                    <div class="invalid-feedback d-block">
+                        Izvēlies preci no saraksta
+                    </div>
+                }
+
+        @if (filteredProducts.Any())
+                {
+                    <div id="productDropdown"
+                        class="border bg-white position-absolute shadow-sm"
+                        style="z-index:1000; width:100%; max-height:220px; overflow-y:auto;">
+
+                        @foreach (var item in filteredProducts.Select((product, index) => new { product, index }))
+                        {
+                            <div id="product-item-@item.index"
+                                class="p-2 border-bottom autocomplete-item
+                                        @(selectedProductIndex == item.index ? "bg-primary text-white" : "")"
+                                @onclick="(() => SelectProduct(item.product))">
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <span class="autocomplete-text"
+                                        title="@item.product.Name">
+                                        @item.product.Name
+                                    </span>
+
+                                    <span class="text-muted ms-3">
+                                        @item.product.Code
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+    </div>
+
+            <div>
+                <label>Kods</label>
+
+                <InputText class="form-control"
+                        @bind-Value="NewProduction.ProductCode"
+                        disabled
+                        tabindex="-1" />
+            </div>
+
+        <div>
+            <label>Skaits</label>
+
+            <input id="quantityInput"
+                @ref="quantityInput"
+                disabled="@IsEditMode"
+                type="number"
+                class="form-control @(invalidQuantity ? "is-invalid" : "")"
+                value="@(NewProduction.Quantity == 0 ? "" : NewProduction.Quantity)"
+                @oninput="HandleQuantityInput" />
+
+            @if (invalidQuantity)
+            {
+                <div class="invalid-feedback d-block">
+                    Ievadiet daudzumu
+                </div>
+            }
+        </div>
+
+                <div>
+                    <label>WPS</label>
+
+                    <input class="form-control"
+                        value="-" />
+                </div>
+
+        <div class="date-group">
+            
+            <div>
+                <label>Sākuma datums</label>
+
+                <SimpleDateInput @key="NewProduction"
+                    Value="NewProduction.StartDate"
+                    Disabled="@IsEditMode"
+                    ValueChanged="OnStartDateChanged"
+                    CssClass="@StartDateClass" />
+            </div>
+
+            <div>
+                <label>Pabeigts</label>
+
+                <SimpleDateInput @key="NewProduction.Id"
+                    Value="NewProduction.FinishedDate"
+                    ValueChanged="OnFinishedDateChanged"
+                    CssClass="@(invalidFinishedDate ? "form-control is-invalid" : "form-control")"
+                    Disabled="@(!IsEditMode)" />
+
+                @if (invalidFinishedDate)
+                {
+                    <div class="invalid-feedback d-block">
+                        Pabeigšanas datumam jābūt lielākam par sākuma datumu
+                    </div>
+                }
+
+                @if (invalidFinishedDateRequired)
+                    {
+                        <div class="invalid-feedback d-block">
+                            Ievadi pabeigšanas datumu
+                        </div>
+                    }
+
+            </div>
+
+        </div>
+
+        <div>
+            <label>Pārbaudīja</label>
+
+            <select class="form-select"
+                    value="@NewProduction.CheckedBy"
+                    @onchange="OnInspectorChanged"
+                    disabled="@(!IsEditMode)">
+
+                <option value="">-- izvēlies --</option>
+
+                @foreach (var inspector in Inspectors)
+                {
+                    <option value="@inspector.FullName">
+                        @FormatInspectorName(inspector.FullName)
+                    </option>
+                }
+            </select>
+
+            @if (invalidInspector)
+                    {
+                        <div class="invalid-feedback d-block">
+                            Izvēlies pārbaudītāju
+                        </div>
+                    }
+        </div>
+
+                <div class="notes-field">
+                    <label>Piezīmes</label>
+
+                    <InputText class="form-control"
+                        @bind-Value="NewProduction.Notes"
+                        disabled="@(!IsEditMode)" />
+                </div>
+
+        <div class="save-button-wrap">
+
+            <button @onclick="HandleSaveClick">
+                Saglabāt
+            </button>
+
+            @if (IsEditMode)
+            {
+                <button type="button"
+                        @onclick="CancelEdit">
+                    Atcelt
+                </button>
+            }
+
+        </div>
+
+</div>
+
+</div>
+
+@if (showSaveSuccess)
+{
+    <div class="delete-confirm-popup">
+
+        <div class="delete-confirm-box">
+
+            <div class="mb-3">
+                Dati veiksmīgi saglabāti
+            </div>
+
+            <div class="delete-confirm-actions">
+
+                <button class="btn btn-success"
+                        @onclick="CloseSaveSuccess">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@code {
+
+    [Parameter] public Production NewProduction { get; set; } = new();
+
+    [Parameter] public bool IsEditMode { get; set; }
+
+    [Parameter] public List<Product> Products { get; set; } = new();
+
+    [Parameter] public List<Product> AllProducts { get; set; } = new();
+
+    [Parameter] public List<Inspector> Inspectors { get; set; } = new();
+
+    [Parameter] public EventCallback SaveProduction { get; set; }
+    [Parameter] public EventCallback<bool> IsEditModeChanged { get; set; }
+    [Parameter] public EventCallback<string> BatchNoChanged { get; set; }
+    [Parameter] public EventCallback CancelEditRequested { get; set; }
+    private bool invalidFinishedDate;
+    private bool invalidProduct;
+   private bool invalidBatchNo;
+    private bool invalidQuantity;
+    private bool invalidStartDate;
+    private bool emptyProduct;
+    private bool showSaveSuccess;
+    private bool invalidInspector;
+    private bool invalidFinishedDateRequired;
+    
+    private List<Product> filteredProducts = new();
+
+    private int selectedProductIndex = -1;
+
+    private int? editingProductionId = null!;
+    private bool ValidateForm()
+{
+    invalidBatchNo = string.IsNullOrWhiteSpace(NewProduction.BatchNo);
+
+    invalidStartDate = NewProduction.StartDate == null;
+
+    emptyProduct = string.IsNullOrWhiteSpace(NewProduction.ProductName);
+
+        if (emptyProduct)
+        {
+            invalidProduct = true;
+        }
+        else
+        {
+            invalidProduct = !Products.Any(x =>
+                x.Name == NewProduction.ProductName &&
+                x.Code == NewProduction.ProductCode);
+        }
+
+    invalidQuantity = NewProduction.Quantity <= 0;
+    
+
+    return !invalidBatchNo
+        && !invalidProduct
+        && !invalidQuantity
+        && !invalidStartDate;
+}
+
+    private string BatchNoClass =>
+    invalidBatchNo ? "form-control text-uppercase is-invalid" : "form-control text-uppercase";
+
+    private string StartDateClass => "form-control";
+
+     private ElementReference quantityInput;
+    private ElementReference productInput;
+
+    private void FilterProducts(ChangeEventArgs e)
+        {
+            if (IsEditMode)
+                return;
+
+            var search = e.Value?.ToString() ?? "";
+
+            NewProduction.ProductName = search;
+            selectedProductIndex = -1;
+            ClearValidationState();
+
+            filteredProducts = Products
+                .Where(x =>
+                    x.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    x.Code.Contains(search, StringComparison.OrdinalIgnoreCase))
+                .Take(10)
+                .ToList();
+        }
+    
+    private async Task HandleProductKeyDown(KeyboardEventArgs e)
+        {
+            if (e.Key == "Escape")
+            {
+                ResetProductionEntry();
+                return;
+            }
+
+            await HandleProductKeyNavigation(e);
+        }
+
+    private void HandleQuantityInput(ChangeEventArgs e)
+        {
+            if (IsEditMode)
+                return;
+
+            if (int.TryParse(e.Value?.ToString(), out int quantity))
+            {
+                NewProduction.Quantity = quantity;
+            }
+            else
+            {
+                NewProduction.Quantity = 0;
+            }
+            ClearValidationState();
+        }
+    
+    private void SelectProduct(Product product)
+        {
+            NewProduction.ProductName = product.Name;
+
+            NewProduction.ProductCode = product.Code;
+
+            filteredProducts.Clear();
+            invalidProduct = false;
+        }
+    
+    private async Task HandleProductKeyNavigation(KeyboardEventArgs e)
+        {
+            if (IsEditMode)
+                return;
+
+            if (!filteredProducts.Any())
+                return;
+
+            if (e.Key == "ArrowDown")
+            {
+                if (selectedProductIndex < filteredProducts.Count - 1)
+                {
+                    selectedProductIndex++;
+                    await JS.InvokeVoidAsync(
+                        "scrollAutocompleteItemIntoView",
+                        selectedProductIndex);
+                }
+            }
+
+            if (e.Key == "ArrowUp")
+            {
+                if (selectedProductIndex > 0)
+                {
+                    selectedProductIndex--;
+                    await JS.InvokeVoidAsync(
+                        "scrollAutocompleteItemIntoView",
+                        selectedProductIndex);
+                }
+            }
+
+            if (e.Key == "Tab")
+                {
+                    if (selectedProductIndex >= 0)
+                    {
+                        SelectProduct(filteredProducts[selectedProductIndex]);
+
+                        selectedProductIndex = -1;
+
+                        await quantityInput.FocusAsync();
+                    }
+                    else
+                    {
+                        filteredProducts.Clear();
+
+                        ValidateProduct();
+                    }
+                }
+        }
+
+    private void ValidateProduct()
+        {
+            emptyProduct = string.IsNullOrWhiteSpace(NewProduction.ProductName);
+
+            if (emptyProduct &&
+                    string.IsNullOrWhiteSpace(NewProduction.ProductCode))
+                {
+                    invalidProduct = false;
+                    return;
+                }
+
+            var exists = Products.Any(x =>
+                x.Name == NewProduction.ProductName &&
+                x.Code == NewProduction.ProductCode);
+
+            invalidProduct = !exists;
+        }
+    
+    private async Task OnStartDateChanged(DateTime? value)
+        {
+            NewProduction.StartDate = value;
+
+            await Task.Delay(1);
+
+            if (ValidateForm())
+            {
+                await InvokeAsync(async () =>
+                {
+                    await SaveProduction.InvokeAsync();
+
+                    await Task.Delay(1);
+                    await productInput.FocusAsync();
+                });
+            }
+        }
+    
+    private void OnBatchNoChanged(ChangeEventArgs e)
+        {
+            NewProduction.BatchNo = e.Value?.ToString()?.ToUpper() ?? string.Empty;
+            ClearValidationState();
+            _ = BatchNoChanged.InvokeAsync(NewProduction.BatchNo);
+        }
+
+    private void ResetProductionEntry()
+{
+    filteredProducts.Clear();
+
+    selectedProductIndex = -1;
+
+    invalidProduct = false;
+    invalidBatchNo = false;
+    invalidQuantity = false;
+    emptyProduct = false;
+
+    NewProduction.ProductName = string.Empty;
+    NewProduction.ProductCode = string.Empty;
+    NewProduction.Quantity = 0;
+
+    _ = IsEditModeChanged.InvokeAsync(false);
+
+    editingProductionId = null!;
+
+    NewProduction.FinishedDate = null;
+
+    NewProduction.CheckedBy = string.Empty;
+
+    NewProduction.Notes = string.Empty;
+}
+
+private void ClearValidationState()
+{
+    invalidProduct = false;
+    invalidBatchNo = false;
+    invalidQuantity = false;
+    emptyProduct = false;
+}
+
+private async Task HandleEscape(KeyboardEventArgs e)
+{
+    if (e.Key == "Escape")
+    {
+        if (IsEditMode)
+        {
+            NewProduction = new Production();
+
+            ResetProductionEntry();
+        }
+
+        await Task.Delay(1);
+    }
+}
+
+private bool CanSaveEdit =>
+    IsEditMode
+    && NewProduction.StartDate.HasValue
+    && NewProduction.FinishedDate.HasValue
+    && !invalidFinishedDate
+    && !string.IsNullOrWhiteSpace(NewProduction.CheckedBy);
+
+private async Task CancelEdit()
+{
+    await CancelEditRequested.InvokeAsync();
+}
+
+private void ValidateFinishedDate()
+{
+    invalidFinishedDate =
+        NewProduction.StartDate.HasValue
+        && NewProduction.FinishedDate.HasValue
+        && NewProduction.FinishedDate.Value.Date < NewProduction.StartDate.Value.Date;
+}
+
+private async Task OnFinishedDateChanged(DateTime? value)
+{
+    NewProduction.FinishedDate = value;
+
+    ValidateFinishedDate();
+    invalidFinishedDateRequired = false;
+
+    await InvokeAsync(StateHasChanged);
+}
+
+private string FormatInspectorName(string fullName)
+{
+    if (string.IsNullOrWhiteSpace(fullName))
+        return "";
+
+    var parts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+    if (parts.Length < 2)
+        return fullName;
+
+    return $"{parts[0][0]}. {parts[^1]}";
+}
+
+private async Task HandleSaveClick()
+{
+    invalidInspector =
+        string.IsNullOrWhiteSpace(NewProduction.CheckedBy);
+
+    invalidFinishedDateRequired =
+        !NewProduction.FinishedDate.HasValue;
+
+    ValidateFinishedDate();
+
+    if (invalidInspector
+        || invalidFinishedDateRequired
+        || invalidFinishedDate)
+    {
+        return;
+    }
+
+    await SaveProduction.InvokeAsync();
+    showSaveSuccess = true;
+}
+
+private void OnInspectorChanged(ChangeEventArgs e)
+{
+    NewProduction.CheckedBy = e.Value?.ToString() ?? "";
+
+    invalidInspector =
+        string.IsNullOrWhiteSpace(NewProduction.CheckedBy);
+}
+
+private void CloseSaveSuccess()
+{
+    showSaveSuccess = false;
+}
+
+}

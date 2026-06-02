@@ -1,0 +1,33 @@
+.product-modal-overlay[b-i8g56dm7kx] {
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(4px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 99999;
+}
+
+.delete-confirm-modal[b-i8g56dm7kx] {
+    width: 420px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 30px;
+
+    border: 1px solid #d8d8d8;
+
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+}

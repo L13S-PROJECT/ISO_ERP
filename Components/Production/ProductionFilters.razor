@@ -1,0 +1,126 @@
+@* ProductionFilters.razor *@
+
+@using ISO_ERP.Models
+@using ISO_ERP.Components.Common
+
+<div class="production-toolbar">
+
+    <input class="form-control"
+       placeholder="Meklēt..."
+       value="@SearchText"
+       @oninput="OnSearchInput" />
+
+    <select class="form-select"
+        value="@SelectedProductFilter"
+        @onchange="OnSelectedProductChanged">
+
+        <option value="">Visi produkti</option>
+
+        @foreach (var productName in AllProducts
+            .Select(x => x.Name)
+            .Distinct()
+            .OrderBy(x => x))
+        {
+            
+            var product = AllProducts.First(x => x.Name == productName);
+
+
+        <option value="@productName">
+            @(product.IsActive
+                ? productName
+                : $"{productName} (neaktīvs)")
+        </option>
+        }
+
+    </select>
+    <div class="toolbar-date">
+    <SimpleDateInput
+        Value="@FilterDateFrom"
+        ValueChanged="FilterDateFromChanged"
+        CssClass="form-control" />
+    </div>
+
+    <div class="toolbar-date">
+    <SimpleDateInput
+            Value="@FilterDateTo"
+            ValueChanged="FilterDateToChanged"
+            CssClass="form-control" />
+    </div>
+
+    <label>
+        <input type="checkbox"
+               checked="@ShowCompletedOnly"
+               @onchange="async e => await ShowCompletedOnlyChanged.InvokeAsync((bool)e.Value!)" />
+        Pabeigti
+    </label>
+
+    <label>
+        <input type="checkbox"
+               checked="@ShowPrintedOnly"
+               @onchange="async e => await ShowPrintedOnlyChanged.InvokeAsync((bool)e.Value!)" />
+        Izprintēti
+    </label>
+
+    <button class="btn btn-secondary"
+            @onclick="OnClearFilters">
+        Notīrīt filtrus
+    </button>
+
+    <button class="btn btn-primary"
+        @onclick="() => OpenPrintPreview.InvokeAsync()">
+            Printēt
+        </button>
+
+</div>
+
+@code {
+    [Parameter] public string SearchText { get; set; } = "";
+    [Parameter] public EventCallback<string> SearchTextChanged { get; set; }
+
+    [Parameter] public string SelectedProductFilter { get; set; } = "";
+    [Parameter] public EventCallback<string> SelectedProductFilterChanged { get; set; }
+
+    [Parameter] public DateTime? FilterDateFrom { get; set; }
+    [Parameter] public EventCallback<DateTime?> FilterDateFromChanged { get; set; }
+
+    [Parameter] public DateTime? FilterDateTo { get; set; }
+    [Parameter] public EventCallback<DateTime?> FilterDateToChanged { get; set; }
+
+    [Parameter] public bool ShowCompletedOnly { get; set; }
+    [Parameter] public EventCallback<bool> ShowCompletedOnlyChanged { get; set; }
+
+    [Parameter] public bool ShowPrintedOnly { get; set; }
+    [Parameter] public EventCallback<bool> ShowPrintedOnlyChanged { get; set; }
+
+    [Parameter] public List<Product> AllProducts { get; set; } = new();
+
+    [Parameter] public EventCallback ClearFilters { get; set; }
+
+    [Parameter]
+    public EventCallback OpenPrintPreview { get; set; }
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+        {
+            SearchText = e.Value?.ToString() ?? "";
+
+            await SearchTextChanged.InvokeAsync(SearchText);
+        }
+
+    private async Task OnSelectedProductChanged(ChangeEventArgs e)
+        {
+            SelectedProductFilter = e.Value?.ToString() ?? "";
+
+            await SelectedProductFilterChanged.InvokeAsync(SelectedProductFilter);
+        }
+    
+    private async Task OnClearFilters()
+        {
+        
+            await FilterDateFromChanged.InvokeAsync(null);
+            await FilterDateToChanged.InvokeAsync(null);
+
+            await ClearFilters.InvokeAsync();
+        }
+
+
+}

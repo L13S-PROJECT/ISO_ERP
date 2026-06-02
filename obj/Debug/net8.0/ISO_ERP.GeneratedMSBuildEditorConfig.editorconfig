@@ -1,0 +1,103 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = ISO_ERP
+build_property.RootNamespace = ISO_ERP
+build_property.ProjectDir = C:\Projects\ISO_ERP\ISO_ERP\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Projects\ISO_ERP\ISO_ERP
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Common/SimpleDateInput.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDb21tb25cU2ltcGxlRGF0ZUlucHV0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Categories.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDYXRlZ29yaWVzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductToolbar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RUb29sYmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-b99acsmccz
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-gipl7qeqd9
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Productions.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0aW9ucy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-2oqtjwt8xu
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Products.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-i8g56dm7kx
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Production/ProductionEntryForm.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0aW9uXFByb2R1Y3Rpb25FbnRyeUZvcm0ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-troiw75s9k
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Production/ProductionFilters.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0aW9uXFByb2R1Y3Rpb25GaWx0ZXJzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-azxgllsypv
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Production/ProductionPrint.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0aW9uXFByb2R1Y3Rpb25QcmludC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-ige9nl7bc1
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Production/ProductionTable.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0aW9uXFByb2R1Y3Rpb25UYWJsZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-zuwwru6cqi
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductCreateModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RDcmVhdGVNb2RhbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-lb2xwyqmb2
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductEditModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RFZGl0TW9kYWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-zlm13ff7v9

@@ -1,0 +1,340 @@
+@page "/production"
+
+@using ISO_ERP.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using System.Linq
+@using ISO_ERP.Components.Common
+@using ISO_ERP.Components.Production
+
+@inject ISO_ERP.Services.ProductService ProductService
+@inject IJSRuntime JS
+@inject ISO_ERP.Services.ProductionService ProductionService
+@inject ISO_ERP.Services.InspectorService InspectorService
+
+<h3>Ražošanas uzskaite</h3>
+
+@if (showPrintPreview)
+{
+    <div class="print-preview-overlay">
+
+        <div class="print-preview-content">
+
+    <div class="print-preview-toolbar no-print">
+
+        <button class="btn btn-secondary"
+                @onclick="OpenPrintPreview">
+            Aizvērt
+        </button>
+
+        <button class="btn btn-primary"
+                onclick="window.print()">
+            Drukāt
+        </button>
+
+    </div>
+
+<ProductionPrint Productions="SelectedProductionsForPrint" />
+
+        </div>
+
+    </div>
+}
+
+<ProductionEntryForm
+    NewProduction="@newProduction"
+    IsEditMode="@isEditMode"
+    Products="@products"
+    AllProducts="@allProducts"
+    BatchNoChanged="@(x => searchText = x)"
+    Inspectors="@inspectors"
+    IsEditModeChanged="@(x => isEditMode = x)"
+    CancelEditRequested="CancelEdit"
+    SaveProduction="SaveProduction" />
+
+<div class="erp-section-title">
+    Esošās ražošanas partijas
+</div>
+
+<ProductionFilters
+    AllProducts="@allProducts"
+    SearchText="@searchText"
+    SearchTextChanged="@(x => searchText = x)"
+    SelectedProductFilter="@selectedProductFilter"
+    SelectedProductFilterChanged="@(x => selectedProductFilter = x)"
+    FilterDateFrom="@filterDateFrom"
+    FilterDateFromChanged="OnFilterDateFromChanged"
+    FilterDateTo="@filterDateTo"
+    FilterDateToChanged="OnFilterDateToChanged"
+    ShowCompletedOnly="@showCompletedOnly"
+    ShowCompletedOnlyChanged="@(x => showCompletedOnly = x)"
+    ShowPrintedOnly="@showPrintedOnly"
+    ShowPrintedOnlyChanged="@(x => showPrintedOnly = x)"
+    ClearFilters="ClearFilters"
+    OpenPrintPreview="OpenPrintPreview" />
+
+<ProductionTable
+    Productions="@productions"
+    SelectedProduction="@selectedProduction"
+    SelectedProductionChanged="@(x => selectedProduction = x)"
+    SearchText="@searchText"
+    SelectedProductFilter="@selectedProductFilter"
+    FilterDateFrom="@filterDateFrom"
+    FilterDateTo="@filterDateTo"
+    ShowCompletedOnly="@showCompletedOnly"
+    ShowPrintedOnly="@showPrintedOnly"
+    NewProduction="@newProduction"
+    ProductionToDelete="@productionToDelete"
+    RequestDelete="RequestDelete"
+    SelectedForPrintIds="@selectedForPrintIds"
+    TogglePrintSelection="TogglePrintSelection"
+    StartEdit="StartEdit" />
+
+@if (productionToDelete != null)
+{
+    <div class="delete-confirm-popup">
+
+        <div class="delete-confirm-box">
+
+            <div class="mb-3">
+                Vai izdzēst šo
+                <strong>@productionToDelete.BatchNo</strong>
+                ierakstu precei
+                <strong>@productionToDelete.ProductName</strong>?
+            </div>
+
+            <div class="delete-confirm-actions">
+
+                <button class="btn btn-danger"
+                        @onclick="ConfirmDelete">
+                    OK
+                </button>
+
+                <button class="btn btn-secondary"
+                        @onclick="CancelDelete">
+                    Atcelt
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+@code {
+
+    
+
+    private DateTime? filterDateFrom;
+
+    private DateTime? filterDateTo;
+
+    private bool isEditMode = false;
+
+    private string searchText = "";
+
+    private string selectedProductFilter = "";
+
+    private bool showCompletedOnly;
+    private bool showPrintPreview;
+
+    private bool showPrintedOnly;
+    private Production? productionToDelete;
+    private List<int> selectedForPrintIds = new();
+
+    private List<Production> productions = new();
+    private List<Product> products = new();
+    private List<Product> allProducts = new();
+          
+    private Production? selectedProduction;
+    private List<Inspector> inspectors = new();
+    
+
+    
+    private Production newProduction = new();
+
+    private bool HasDateRangeError()
+        {
+            return newProduction.StartDate.HasValue
+                && newProduction.FinishedDate.HasValue
+                && newProduction.FinishedDate.Value.Date < newProduction.StartDate.Value.Date;
+        }
+
+    protected override async Task OnInitializedAsync()
+    {
+        productions = await ProductionService.GetAllAsync();
+        products = await ProductService.GetAllAsync();
+        allProducts = await ProductService.GetAllWithInactiveAsync();
+        inspectors = await InspectorService.GetAllAsync();
+    }
+
+    private async Task SaveProduction()
+        {
+            if (isEditMode)
+                {
+                    await SaveEditProduction();
+                    return;
+                }
+               
+            var savedBatchNo = newProduction.BatchNo;
+            var savedStartDate = newProduction.StartDate;
+
+            await ProductionService.AddAsync(newProduction);
+
+            productions.Insert(0, new Production
+                {
+                    BatchNo = newProduction.BatchNo,
+                    ProductName = newProduction.ProductName,
+                    ProductCode = newProduction.ProductCode,
+                    Quantity = newProduction.Quantity,
+                    StartDate = newProduction.StartDate,
+                    FinishedDate = newProduction.FinishedDate,
+                    CheckedBy = newProduction.CheckedBy,
+                    Notes = newProduction.Notes,
+                    PrintedDate = newProduction.PrintedDate,
+                    IsPrinted = newProduction.IsPrinted
+                });
+
+            newProduction = new Production
+            {
+                BatchNo = savedBatchNo,
+                StartDate = savedStartDate
+            };
+
+       }
+
+    private async Task SaveEditProduction()
+        {
+            if (newProduction.FinishedDate < newProduction.StartDate)
+            {
+                return;
+            }
+
+            await ProductionService.UpdateAsync(newProduction);
+
+            var existing = productions
+                .FirstOrDefault(x => x.Id == newProduction.Id);
+
+            if (existing != null)
+            {
+                existing.CheckedBy = newProduction.CheckedBy;
+                existing.FinishedDate = newProduction.FinishedDate;
+                existing.Notes = newProduction.Notes;
+                existing.IsCompleted = newProduction.FinishedDate != null;
+                isEditMode = false;
+            }
+
+            newProduction = new Production();
+        }
+
+
+
+     private void ClearFilters()
+        {
+            searchText = "";
+
+            selectedProductFilter = "";
+
+            filterDateFrom = null;
+
+            filterDateTo = null;
+
+            showCompletedOnly = false;
+
+            showPrintedOnly = false;
+        }
+
+    private Task OnFilterDateFromChanged(DateTime? value)
+        {
+            filterDateFrom = value;
+
+            StateHasChanged();
+
+            return Task.CompletedTask;
+        }
+
+    private Task OnFilterDateToChanged(DateTime? value)
+        {
+            filterDateTo = value;
+
+            StateHasChanged();
+
+            return Task.CompletedTask;
+        }
+
+    private void StartEdit(Production production)
+        {
+            isEditMode = true;
+
+            newProduction = new Production
+            {
+                Id = production.Id,
+                BatchNo = production.BatchNo,
+                ProductName = production.ProductName,
+                ProductCode = production.ProductCode,
+                Quantity = production.Quantity,
+                Recipe = production.Recipe,
+                IsPrinted = production.IsPrinted,
+                PrintedDate = production.PrintedDate,
+                StartDate = production.StartDate,
+                CheckedBy = production.CheckedBy,
+                FinishedDate = production.FinishedDate,
+                Notes = production.Notes,
+                IsCompleted = production.IsCompleted
+            };
+        }
+    
+    private void CancelEdit()
+        {
+            isEditMode = false;
+
+            newProduction = new Production();
+        }
+    
+    private void RequestDelete(Production production)
+        {
+            productionToDelete = production;
+        }
+    
+    private async Task ConfirmDelete()
+        {
+            if (productionToDelete == null)
+                return;
+
+            await ProductionService.DeleteAsync(productionToDelete.Id);
+
+            productions.RemoveAll(x => x.Id == productionToDelete.Id);
+
+            productionToDelete = null;
+        }
+
+    private void CancelDelete()
+        {
+            productionToDelete = null;
+        }
+    
+    private void OpenPrintPreview()
+{
+    showPrintPreview = !showPrintPreview;
+}
+
+private void TogglePrintSelection(int id)
+{
+    if (selectedForPrintIds.Contains(id))
+    {
+        selectedForPrintIds.Remove(id);
+    }
+    else
+    {
+        selectedForPrintIds.Add(id);
+    }
+}
+
+private List<Production> SelectedProductionsForPrint =>
+    productions
+        .Where(x => selectedForPrintIds.Contains(x.Id))
+        .ToList();
+
+}

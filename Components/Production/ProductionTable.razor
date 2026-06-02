@@ -1,0 +1,234 @@
+@* ProductionTable.razor *@
+
+@using ISO_ERP.Models
+
+<div class="production-table-container">
+
+<table class="table table-striped mt-3 erp-entry-table production-table">
+
+    <thead>
+        <tr>
+            <th>Raž.Nr.</th>
+
+            <th>Produkta nosaukums</th>
+
+            <th>Kods</th>
+
+            <th>Skaits</th>
+
+            <th>WPS</th>
+
+            <th>Sāk.datums</th>
+
+            <th>Pabeigts</th>
+
+            <th>Pārbaudīja</th>
+
+            <th>Piezīmes</th>
+
+            <th title="Printēt" class="text-center">
+                <span class="print-header-icon">🖨️</span>
+            </th>
+
+            <th>Izprintēts</th>
+
+            <th>Darbība</th>
+        </tr>
+    </thead>
+   
+    <tbody>
+
+@foreach (var item in FilteredList)
+    {
+       <tr class="@GetRowClass(item)"
+        @ondblclick="() => StartEdit.InvokeAsync(item)"
+       @onclick="async () =>
+            {
+                if (SelectedProduction == item)
+                    await SelectedProductionChanged.InvokeAsync(null);
+                else
+                    await SelectedProductionChanged.InvokeAsync(item);
+            }">
+
+            <td>
+                @item.BatchNo
+            </td>
+
+            <td title="@item.ProductName">
+                @item.ProductName
+            </td>
+
+            <td>
+                @item.ProductCode
+            </td>
+
+            <td>
+                @item.Quantity
+            </td>
+
+            <td>
+                -
+            </td>
+
+            <td>
+                @(item.StartDate?.ToString("dd.MM.yyyy") ?? "-")
+            </td>
+
+            <td>
+                @(item.FinishedDate?.ToString("dd.MM.yyyy") ?? "-")
+            </td>
+
+            <td>
+                @(item.CheckedBy ?? "-")
+            </td>
+
+            <td>
+                @(item.Notes ?? "-")
+            </td>
+
+            <td class="print-checkbox-cell">
+
+                <input type="checkbox"
+                    checked="@IsSelectedForPrint(item)"
+                    @onchange="async () => await TogglePrintSelection.InvokeAsync(item.Id)" />
+
+            </td>
+
+            <td>
+                @(item.PrintedDate?.ToString("dd.MM.yyyy") ?? "-")
+            </td>
+
+            <td class="action-cell">
+
+                <button class="icon-button"
+                        title="Labot"
+                        @onclick="() => StartEdit.InvokeAsync(item)"
+                        @onclick:stopPropagation="true">
+                    <span class="edit-icon">🖉</span>
+                </button>
+
+                <button class="icon-button"
+                        title="Dzēst"
+                        @onclick="() => RequestDelete.InvokeAsync(item)"
+                        @onclick:stopPropagation="true">
+                    <span class="delete-icon">🗑</span>
+                </button>
+
+            </td>
+
+        </tr>
+    }
+
+</tbody>
+
+</table>
+
+</div>
+
+@code {
+
+    [Parameter] public List<Production> Productions { get; set; } = new();
+
+    [Parameter] public Production? SelectedProduction { get; set; }
+
+    [Parameter] public EventCallback<Production?> SelectedProductionChanged { get; set; }
+
+    [Parameter] public string SearchText { get; set; } = "";
+
+    [Parameter] public string SelectedProductFilter { get; set; } = "";
+
+    [Parameter] public DateTime? FilterDateFrom { get; set; }
+
+    [Parameter] public DateTime? FilterDateTo { get; set; }
+
+    [Parameter] public bool ShowCompletedOnly { get; set; }
+
+    [Parameter] public bool ShowPrintedOnly { get; set; }
+
+    [Parameter] public Production NewProduction { get; set; } = new();
+
+    [Parameter] public EventCallback<Production> StartEdit { get; set; }
+    [Parameter] public Production? ProductionToDelete { get; set; }
+    [Parameter] public EventCallback<Production> RequestDelete { get; set; }
+
+    [Parameter]
+    public List<int> SelectedForPrintIds { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<int> TogglePrintSelection { get; set; }
+
+    private List<Production> FilteredList
+            {
+                get
+                {
+                    var query = Productions.AsEnumerable();
+
+                    if (!string.IsNullOrWhiteSpace(SearchText))
+                    {
+                        query = query.Where(x =>
+                            (x.BatchNo?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                            (x.ProductName?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                            (x.ProductCode?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false));
+                    }
+
+                    query = query.Where(x =>
+                        string.IsNullOrWhiteSpace(SelectedProductFilter) ||
+                        x.ProductName == SelectedProductFilter);
+                    
+                    if (FilterDateFrom.HasValue)
+                    {
+                        query = query.Where(x =>
+                            x.StartDate.HasValue &&
+                            x.StartDate.Value.Date >= FilterDateFrom.Value.Date);
+                    }
+
+                    if (FilterDateTo.HasValue)
+                    {
+                        query = query.Where(x =>
+                            x.StartDate.HasValue &&
+                            x.StartDate.Value.Date <= FilterDateTo.Value.Date);
+                    }
+
+                    if (ShowCompletedOnly)
+                        {
+                            query = query.Where(x => x.IsCompleted);
+                        }
+
+                    return query
+                        .OrderBy(x => new string((x.BatchNo ?? "").TakeWhile(char.IsLetter).ToArray()))
+                        .ThenBy(x => ExtractBatchNumber(x.BatchNo))
+                        .ThenBy(x => x.ProductName)
+                        .ThenBy(x => x.StartDate)
+                        .ToList();
+                }
+            }
+        
+        private static int ExtractBatchNumber(string? batchNo)
+            {
+                if (string.IsNullOrWhiteSpace(batchNo))
+                    return 0;
+
+                var digits = new string(batchNo.Where(char.IsDigit).ToArray());
+
+                return int.TryParse(digits, out var number)
+                    ? number
+                    : 0;
+            }
+        
+        private string GetRowClass(Production item)
+            {
+                if (ProductionToDelete?.Id == item.Id)
+                    return "delete-row";
+
+                if (SelectedProduction?.Id == item.Id)
+                    return "selected-row";
+
+                return "";
+            }
+
+    private bool IsSelectedForPrint(Production item)
+        {
+            return SelectedForPrintIds.Contains(item.Id);
+        }
+
+}

@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="ISO_ERP.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <HeadOutlet @rendermode="InteractiveServer" />
+</head>
+
+<body>
+    <Routes @rendermode="InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+
+    <script src="https://unpkg.com/imask"></script>
+
+    <script>
+    window.erpDateMask = (element) => {
+
+        const mask = IMask(element, {
+            mask: '00/00/0000'
+        });
+
+        element._erpMask = mask;
+
+    };
+
+    window.erpDateSetValue = (element, value) => {
+            if (element && element._erpMask) {
+                element._erpMask.value = value || "";
+                element._erpMask.updateValue();
+            }
+        };
+
+    window.scrollAutocompleteItemIntoView = function (index) {
+
+        const container = document.getElementById("productDropdown");
+
+        const item = document.getElementById(`product-item-${index}`);
+
+        if (!container || !item)
+            return;
+
+        item.scrollIntoView({
+            block: "nearest"
+        });
+    };
+
+</script>
+
+</body>
+
+</html>

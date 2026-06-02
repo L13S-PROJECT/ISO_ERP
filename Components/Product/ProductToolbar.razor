@@ -1,0 +1,114 @@
+@* ProductToolbar.razor - Produkta rīkjosla *@
+@using ISO_ERP.Models
+
+
+<div class="row mb-3">
+
+    <div class="col-md-2">
+        <button class="btn btn-primary w-100"
+        @onclick="OpenCreateModal">
+        + Jauna prece
+    </button>
+    </div>
+
+    <div class="col-md-4">
+
+        <input class="form-control"
+            placeholder="Meklēt preci..."
+            value="@SearchText"
+            @oninput="@(e => OnSearchChanged(e))" />
+
+
+    </div>
+
+    <div class="col-md-3">
+        <select class="form-select"
+                value="@SelectedCategoryId"
+                @onchange="OnCategoryChanged">
+
+            <option value="">Visas kategorijas</option>
+
+            @foreach (var category in Categories)
+            {
+                <option value="@category.Id">
+                    @category.Name
+                </option>
+            }
+
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <select class="form-select"
+                value="@SelectedStatus"
+                @onchange="OnStatusChanged">
+
+            <option value="Active">Aktīvās</option>
+
+            <option value="Inactive">Neaktīvās</option>
+
+            <option value="All">Visas</option>
+
+        </select>
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public string SearchText { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> SearchTextChanged { get; set; }
+
+   private async Task OnSearchChanged(ChangeEventArgs e)
+            {
+                var value = e.Value?.ToString() ?? string.Empty;
+
+                await SearchTextChanged.InvokeAsync(value);
+            }
+    
+    [Parameter]
+    public List<Category> Categories { get; set; } = new();
+
+    [Parameter]
+    public int? SelectedCategoryId { get; set; }
+
+    [Parameter]
+    public EventCallback<int?> SelectedCategoryIdChanged { get; set; }
+    
+    [Parameter]
+    public string SelectedStatus { get; set; } = "Active";
+
+    [Parameter]
+    public EventCallback<string> SelectedStatusChanged { get; set; }
+
+    [Parameter]
+    public EventCallback OnCreateClick { get; set; }
+    
+    private async Task OnCategoryChanged(ChangeEventArgs e)
+        {
+            int? value = null;
+
+            if (int.TryParse(e.Value?.ToString(), out var parsed))
+            {
+                value = parsed;
+            }
+
+            await SelectedCategoryIdChanged.InvokeAsync(value);
+        }
+
+    private async Task OnStatusChanged(ChangeEventArgs e)
+        {
+            var value = e.Value?.ToString() ?? "Active";
+
+            await SelectedStatusChanged.InvokeAsync(value);
+        }
+    
+    private async Task OpenCreateModal()
+    {
+        await OnCreateClick.InvokeAsync();
+    }
+
+}

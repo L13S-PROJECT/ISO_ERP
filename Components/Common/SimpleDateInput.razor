@@ -1,0 +1,113 @@
+@using Microsoft.AspNetCore.Components.Web
+
+<input class="erp-date-input @CssClass @(HasError ? "is-invalid" : "")"
+       value="@Text"
+       @oninput="HandleInput"
+       @onblur="HandleBlur"
+       @onkeydown="HandleKeyDown"
+       @onkeydown:preventDefault="PreventTab"
+       inputmode="numeric"
+       autocomplete="off"
+       placeholder="dd/mm/yyyy"
+       disabled="@Disabled" />
+
+@if (HasError)
+{
+    <div class="invalid-feedback d-block">
+        Nepareizs datums
+    </div>
+}
+
+@code {
+
+    [Parameter] public DateTime? Value { get; set; }
+
+    [Parameter] public EventCallback<DateTime?> ValueChanged { get; set; }
+
+    [Parameter] public string CssClass { get; set; } = "";
+
+    [Parameter] public bool Disabled { get; set; }
+    private bool isProcessing;
+
+    private string Text = "";
+
+    private bool HasError;
+    private bool PreventTab;
+
+    protected override void OnParametersSet()
+    {
+        Text = Value?.ToString("dd/MM/yyyy") ?? "";
+    }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        var raw = new string(
+            (e.Value?.ToString() ?? "")
+            .Where(char.IsDigit)
+            .ToArray());
+
+        if (raw.Length > 8)
+            raw = raw[..8];
+
+        if (raw.Length >= 5)
+            Text = $"{raw[..2]}/{raw[2..4]}/{raw[4..]}";
+        else if (raw.Length >= 3)
+            Text = $"{raw[..2]}/{raw[2..]}";
+        else
+            Text = raw;
+
+        HasError = false;
+    }
+
+    private async Task HandleBlur(FocusEventArgs e)
+    {
+        await ValidateAndUpdate();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Tab" || e.Key == "Enter")
+        {
+            await ValidateAndUpdate();
+        }
+    }
+
+    private async Task ValidateAndUpdate()
+{
+    if (isProcessing)
+        return;
+
+    isProcessing = true;
+
+    try
+    {
+        if (string.IsNullOrWhiteSpace(Text))
+        {
+            HasError = false;
+            await ValueChanged.InvokeAsync(null);
+            return;
+        }
+
+        bool ok = DateTime.TryParseExact(
+            Text,
+            "dd/MM/yyyy",
+            null,
+            System.Globalization.DateTimeStyles.None,
+            out var parsed);
+
+        if (!ok)
+        {
+            HasError = true;
+            return;
+        }
+
+        HasError = false;
+
+        await ValueChanged.InvokeAsync(parsed);
+    }
+    finally
+    {
+        isProcessing = false;
+    }
+}
+}

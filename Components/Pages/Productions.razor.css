@@ -1,0 +1,563 @@
+/* productions.razor.css */
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* Date input placeholder format */
+
+input[type="date"] {
+    position: relative;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    color: #212529;
+}
+
+input[type="date"]:invalid::-webkit-datetime-edit {
+    color: #6c757d;
+}
+
+/* ERP ievades panelis */
+
+.erp-entry-panel {
+    background: #f8f9fa;
+    border: 1px solid #dcdfe3;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    overflow: visible;
+}
+
+.erp-entry-header {
+    font-size: 15px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 12px;
+    padding-left: 2px;
+}
+
+
+/* ERP ievades tabula */
+
+.erp-entry-table td {
+    vertical-align: top;
+    border-bottom: none;
+    padding: 10px 8px;
+    position: relative;
+}
+
+.erp-entry-table {
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 0;
+}
+
+.erp-entry-table th,
+.erp-entry-table td {
+    vertical-align: middle;
+    padding: 10px 8px;
+    white-space: normal;
+}
+
+.erp-entry-table input:not([type="checkbox"]),
+.erp-entry-table .form-control {
+    width: 100%;
+    min-width: 90px;
+}
+
+.production-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.print-checkbox-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.erp-entry-table th {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 90px;
+}
+
+.production-table th:first-child,
+.production-table td:first-child {
+    width: 30px;
+}
+
+.production-table td:first-child input {
+    width: 60px;
+    min-width: 60px;
+}
+
+
+/* Sekciju virsraksti */
+
+.erp-section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #495057;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 2px;
+}
+
+/* ERP input hierarchy */
+
+.erp-entry-table input:disabled,
+.erp-entry-table .form-control:disabled {
+    background-color: #eef1f4;
+    color: #6c757d;
+    opacity: 1;
+}
+
+/* Date lauki */
+
+.erp-entry-table input[type="date"] {
+    background-color: #fcfcfd;
+}
+
+/* Save button */
+
+.erp-entry-table .btn-success {
+    min-width: 110px;
+    height: 42px;
+    font-weight: 600;
+}
+
+/* Jaunas partijasražošanas tabulas css */
+
+.production-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        70px
+        180px
+        70px
+        70px
+        70px
+        260px
+        120px
+        minmax(0, 1fr)
+        max-content;
+
+    column-gap: 12px;
+    row-gap: 12px;
+    align-items: end;
+    justify-content: stretch;
+    width: 100%;
+}
+
+.production-form-grid > * {
+    min-width: 0;
+}
+
+.production-form-grid label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.autocomplete-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 240px;
+}
+
+.production-form-grid input {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    min-width: 0;
+}
+
+.production-form-grid .form-control {
+    min-width: 0;
+}
+
+
+.invalid-feedback {
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.date-group {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.date-group > div {
+    flex: 1;
+    min-width: 0;
+}
+
+.save-button-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    min-width: 110px;
+}
+
+.save-button-wrap button {
+    height: 38px;
+    padding: 0 16px;
+    border: 1px solid #c8ced6;
+    border-radius: 8px;
+    background: #f8f9fa;
+    color: #343a40;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.save-button-wrap button:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.notes-field {
+    width: 100%;
+}
+
+.notes-field .form-control {
+    width: 100%;
+}
+
+.production-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.production-toolbar .form-control,
+.production-toolbar .form-select {
+    height: 38px;
+}
+
+.production-toolbar input[type="date"] {
+    width: 130px;
+    flex: 0 0 auto;
+}
+
+.production-toolbar .form-select {
+    width: 220px;
+    flex: 0 1 220px;
+}
+
+.production-toolbar > .form-control:first-child {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+
+.production-table-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 260px);
+    border: 1px solid #dcdfe3;
+    border-radius: 8px;
+    background: white;
+}
+
+.production-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #fff;
+    padding-bottom: 10px;
+}
+
+.production-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: #b3b4b4;
+    border-bottom: 2px solid #cfd4da;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.production-table th:nth-child(1),
+.production-table td:nth-child(1) {
+    width: 70px;
+    min-width: 70px;
+}
+
+.production-table th:nth-child(2),
+.production-table td:nth-child(2) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.production-table td:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.production-table th:nth-child(3),
+.production-table td:nth-child(3),
+.production-table th:nth-child(4),
+.production-table td:nth-child(4),
+.production-table th:nth-child(5),
+.production-table td:nth-child(5) {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+}
+
+.production-table th:nth-child(6),
+.production-table td:nth-child(6),
+.production-table th:nth-child(7),
+.production-table td:nth-child(7),
+.production-table th:nth-child(8),
+.production-table td:nth-child(8) {
+    width: 95px;
+    min-width: 95px;
+    max-width: 95px;
+}
+
+.production-table th:nth-child(10),
+.production-table td:nth-child(10) {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    text-align: center;
+}
+
+.print-header-icon {
+    font-size: 18px;
+    line-height: 1;
+    display: inline-block;
+}
+
+.edit-icon {
+    display: inline-block;
+    transform: rotate(-18deg);
+    font-size: 16px;
+}
+
+.delete-icon {
+    display: inline-block;
+    font-size: 16px;
+}
+
+.action-cell {
+    white-space: nowrap;
+    width: 80px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.icon-button {
+    border: none;
+    background: transparent;
+    padding: 2px;
+    margin: 0 1px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #212529;
+}
+
+.icon-button:hover {
+    opacity: 0.65;
+}
+
+.production-table th,
+.production-table td {
+    font-size: 13px;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    line-height: 1.15;
+}
+
+.production-table th:nth-child(11),
+.production-table td:nth-child(11) {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+}
+
+.production-table th:nth-child(12),
+.production-table td:nth-child(12) {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+}
+
+.production-table th:nth-child(9),
+.production-table td:nth-child(9) {
+    width: auto;
+    min-width: 260px;
+}
+
+.production-table td:nth-child(9) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.production-toolbar .form-control,
+.production-toolbar .form-select,
+.production-toolbar label,
+.production-toolbar button {
+    font-size: 12px;
+}
+
+.production-table tbody tr {
+    transition: background-color 0.12s ease;
+    cursor: pointer;
+}
+
+.production-table tbody tr:hover {
+    background-color: #dfe3e7 !important;
+}
+
+.production-table tbody tr.selected-row {
+    background-color: #cfd4da !important;
+}
+
+.delete-confirm-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.18);
+    backdrop-filter: blur(1px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+}
+
+.delete-confirm-box {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 22px 26px;
+    min-width: 340px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    border: 1px solid #dcdfe3;
+}
+
+.delete-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.delete-confirm-actions .btn {
+    min-width: 82px;
+    height: 34px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.print-preview-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background: rgba(0,0,0,0.65);
+
+    z-index: 99999;
+
+    overflow-y: auto;
+
+    padding: 40px;
+}
+
+.print-preview-content {
+    background: white;
+
+    width: 100%;
+    max-width: none;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+
+.print-preview-toolbar {
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    padding: 10px;
+    margin-bottom: 20px;
+
+    background: white;
+    border-bottom: 1px solid #ddd;
+
+    z-index: 10;
+}
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    .print-preview-overlay {
+        position: static;
+        background: white;
+        padding: 0;
+        overflow: visible;
+    }
+
+    .print-preview-content {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        width: auto;
+        max-width: none;
+    }
+
+    body * {
+    visibility: hidden;
+        }
+
+        .print-preview-overlay,
+        .print-preview-overlay * {
+            visibility: visible;
+        }
+
+        .print-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: white;
+            padding: 0;
+        }
+}

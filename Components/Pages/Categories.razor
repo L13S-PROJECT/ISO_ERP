@@ -1,0 +1,44 @@
+@page "/categories"
+
+@using ISO_ERP.Models
+@inject ISO_ERP.Services.CategoryService CategoryService
+
+<h3>Kategorijas</h3>
+
+@if (categories == null)
+{
+    <p>Ielāde...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nosaukums</th>
+                <th>Piezīmes</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in categories)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<Category>? categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetAllAsync();
+    }
+}

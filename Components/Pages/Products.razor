@@ -1,0 +1,291 @@
+@* Products.razor - Produkta lapa*@
+
+@page "/products"
+
+@using ISO_ERP.Models
+@using ISO_ERP.Components.Product
+
+@inject ISO_ERP.Services.ProductService ProductService
+@inject ISO_ERP.Services.CategoryService CategoryService
+
+<h3>Preces</h3>
+
+<ProductToolbar
+    SearchText="@searchText"
+    SearchTextChanged="@OnSearchChanged"
+    Categories="@categories"
+    SelectedCategoryId="@selectedCategoryId"
+    SelectedCategoryIdChanged="@OnCategoryChanged"
+    SelectedStatus="@selectedStatus"
+    SelectedStatusChanged="@OnStatusChanged"
+    OnCreateClick="@OpenCreateModal" />
+
+
+<table class="table table-striped">
+
+    <thead>
+        <tr>
+            <th>Kods</th>
+            <th>Nosaukums</th>
+            <th>Kategorija</th>
+            <th>Statuss</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    @foreach (var item in products)
+    {
+        <tr>
+            <td>@item.Code</td>
+
+            <td>@item.Name</td>
+
+            <td>
+                @(item.Category?.Name ?? "-")
+            </td>
+
+            <td>
+                @(item.IsActive ? "Aktīva" : "Neaktīva")
+            </td>
+
+            <td>
+                <td>
+
+                <button class="btn btn-sm btn-secondary"
+                        @onclick="() => OpenEditModal(item.Id)">
+                    Labot
+                </button>
+
+                <button class="btn btn-sm btn-danger ms-2"
+                    @onclick="() => OpenDeleteConfirm(item.Id, item.Name)">
+                Dzēst
+            </button>
+
+            </td>
+            </td>
+        </tr>
+    }
+
+</tbody>
+
+</table>
+
+@if (showCreateModal)
+{
+    <ProductCreateModal
+        Categories="@categories"
+        OnClose="@CloseCreateModal" />
+}
+
+@if (showEditModal && editingProductId != null)
+{
+    <ProductEditModal
+        ProductId="@editingProductId.Value"
+        Categories="@categories"
+        OnClose="@CloseEditModal" />
+}
+
+@if (showDeleteConfirm)
+{
+    <div class="product-modal-overlay">
+
+        <div class="product-modal delete-confirm-modal">
+
+            <h3>
+                Vai dzēst preci?
+            </h3>
+
+            <p>
+                "@deletingProductName"
+            </p>
+
+            <div class="modal-buttons">
+
+                <button class="btn btn-danger"
+                        @onclick="ConfirmDelete">
+                    Dzēst
+                </button>
+
+                <button class="btn btn-secondary"
+                        @onclick="CloseDeleteConfirm">
+                    Atcelt
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+@code {
+
+    private List<Product> products = new();
+
+    private List<Category> categories = new();
+    private List<Product> allProducts = new();
+    private string _searchText = string.Empty;
+    private bool showCreateModal = false;
+    private bool showEditModal = false;
+    private bool showDeleteConfirm = false;
+
+    private int deletingProductId;
+
+    private string deletingProductName = string.Empty;
+    private int? editingProductId;
+
+private void OnSearchChanged(string value)
+    {
+        searchText = value;
+    }
+
+        private string searchText
+        {
+            get => _searchText;
+
+            set
+            {
+                _searchText = value;
+                FilterProducts();
+            }
+        }
+
+private void FilterProducts()
+{
+    products = allProducts
+        .Where(x =>
+
+            (
+                string.IsNullOrWhiteSpace(searchText)
+
+                ||
+
+                (x.Name != null &&
+                 x.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+
+                ||
+
+                (x.Code != null &&
+                 x.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            )
+
+            &&
+
+            (
+                selectedCategoryId == null
+
+                ||
+
+                x.CategoryId == selectedCategoryId
+            )
+
+            &&
+
+            (
+                selectedStatus == "All"
+
+                ||
+
+                (selectedStatus == "Active" && x.IsActive)
+
+                ||
+
+                (selectedStatus == "Inactive" && !x.IsActive)
+            )
+        )
+        .ToList();
+}
+
+    protected override async Task OnInitializedAsync()
+        {
+            allProducts = await ProductService.GetAllAsync();
+
+            categories = await CategoryService.GetAllAsync();
+
+            FilterProducts();
+        }
+
+    private int? selectedCategoryId;
+
+    private void OnCategoryChanged(int? value)
+    {
+        selectedCategoryId = value;
+
+        FilterProducts();
+    }
+
+    private string selectedStatus = "Active";
+    private void OnStatusChanged(string value)
+        {
+            selectedStatus = value;
+
+            FilterProducts();
+        }
+    
+    private void OpenCreateModal()
+        {
+            showCreateModal = true;
+        }
+    
+    private void OpenEditModal(int productId)
+            {
+                editingProductId = productId;
+
+                showEditModal = true;
+            }
+
+    private async Task DeleteProduct(int productId)
+            {
+                await ProductService.SoftDeleteAsync(productId);
+
+                allProducts = await ProductService.GetAllAsync();
+
+                FilterProducts();
+            }
+
+    private void OpenDeleteConfirm(int productId, string productName)
+            {
+                deletingProductId = productId;
+
+                deletingProductName = productName;
+
+                showDeleteConfirm = true;
+            }
+    private async Task CloseCreateModal()
+        {
+            showCreateModal = false;
+
+            allProducts = await ProductService.GetAllAsync();
+
+            FilterProducts();
+        }
+    private async Task CloseEditModal()
+        {
+            showEditModal = false;
+
+            editingProductId = null;
+
+            allProducts = await ProductService.GetAllAsync();
+
+            FilterProducts();
+        }
+
+    private async Task ConfirmDelete()
+    {
+        await ProductService.SoftDeleteAsync(deletingProductId);
+
+        showDeleteConfirm = false;
+
+        allProducts = await ProductService.GetAllAsync();
+
+        FilterProducts();
+    }
+
+    private void CloseDeleteConfirm()
+    {
+        showDeleteConfirm = false;
+    }
+
+}
