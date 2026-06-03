@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
     },
     {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\download.js",
+      "PackagePath": "staticwebassets\\download.js"
+    },
+    {
       "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },

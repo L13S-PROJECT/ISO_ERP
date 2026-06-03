@@ -6,40 +6,13 @@
 @using System.Linq
 @using ISO_ERP.Components.Common
 @using ISO_ERP.Components.Production
-
+@inject ISO_ERP.Services.ProductionPdfService ProductionPdfService
 @inject ISO_ERP.Services.ProductService ProductService
 @inject IJSRuntime JS
 @inject ISO_ERP.Services.ProductionService ProductionService
 @inject ISO_ERP.Services.InspectorService InspectorService
 
 <h3>Ražošanas uzskaite</h3>
-
-@if (showPrintPreview)
-{
-    <div class="print-preview-overlay">
-
-        <div class="print-preview-content">
-
-    <div class="print-preview-toolbar no-print">
-
-        <button class="btn btn-secondary"
-                @onclick="OpenPrintPreview">
-            Aizvērt
-        </button>
-
-        <button class="btn btn-primary"
-                onclick="window.print()">
-            Drukāt
-        </button>
-
-    </div>
-
-<ProductionPrint Productions="SelectedProductionsForPrint" />
-
-        </div>
-
-    </div>
-}
 
 <ProductionEntryForm
     NewProduction="@newProduction"
@@ -71,7 +44,7 @@
     ShowPrintedOnly="@showPrintedOnly"
     ShowPrintedOnlyChanged="@(x => showPrintedOnly = x)"
     ClearFilters="ClearFilters"
-    OpenPrintPreview="OpenPrintPreview" />
+    GeneratePdf="GeneratePdf" />
 
 <ProductionTable
     Productions="@productions"
@@ -138,8 +111,6 @@
     private string selectedProductFilter = "";
 
     private bool showCompletedOnly;
-    private bool showPrintPreview;
-
     private bool showPrintedOnly;
     private Production? productionToDelete;
     private List<int> selectedForPrintIds = new();
@@ -188,6 +159,7 @@
                     BatchNo = newProduction.BatchNo,
                     ProductName = newProduction.ProductName,
                     ProductCode = newProduction.ProductCode,
+                    ProductId = newProduction.ProductId,
                     Quantity = newProduction.Quantity,
                     StartDate = newProduction.StartDate,
                     FinishedDate = newProduction.FinishedDate,
@@ -274,6 +246,7 @@
                 BatchNo = production.BatchNo,
                 ProductName = production.ProductName,
                 ProductCode = production.ProductCode,
+                ProductId = production.ProductId,
                 Quantity = production.Quantity,
                 Recipe = production.Recipe,
                 IsPrinted = production.IsPrinted,
@@ -315,10 +288,6 @@
             productionToDelete = null;
         }
     
-    private void OpenPrintPreview()
-{
-    showPrintPreview = !showPrintPreview;
-}
 
 private void TogglePrintSelection(int id)
 {
@@ -336,5 +305,22 @@ private List<Production> SelectedProductionsForPrint =>
     productions
         .Where(x => selectedForPrintIds.Contains(x.Id))
         .ToList();
+
+private async Task GeneratePdf()
+{
+    if (!SelectedProductionsForPrint.Any())
+        return;
+
+    var pdfBytes = await ProductionPdfService
+        .GenerateProductionPdf(SelectedProductionsForPrint);
+
+    var fileName = $"production-{DateTime.Now:yyyyMMdd-HHmm}.pdf";
+
+    await JS.InvokeVoidAsync(
+        "downloadFileFromBytes",
+        fileName,
+        Convert.ToBase64String(pdfBytes)
+    );
+}
 
 }

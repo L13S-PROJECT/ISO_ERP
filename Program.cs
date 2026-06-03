@@ -1,7 +1,10 @@
 using ISO_ERP.Components;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 builder.Services.AddDbContextFactory<ISO_ERP.Data.AppDbContext>(options =>
     options.UseMySql(
@@ -16,6 +19,7 @@ builder.Services.AddScoped<ISO_ERP.Services.ProductService>();
 builder.Services.AddScoped<ISO_ERP.Services.DetailService>();
 builder.Services.AddScoped<ISO_ERP.Services.ProductionService>();
 builder.Services.AddScoped<ISO_ERP.Services.InspectorService>();
+builder.Services.AddScoped<ISO_ERP.Services.ProductionPdfService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

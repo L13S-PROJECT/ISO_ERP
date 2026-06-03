@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "DtYmpRBePB6kQG1GWKU7Tpnjuo7zh+TKrJfUcsaMqm8=",
+  "Hash": "s5WeZK9gcgV1T0aGx8b5M5aVhcWRE4ZWbSzer+xmDKk=",
   "Source": "ISO_ERP",
   "BasePath": "_content/ISO_ERP",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\download.js",
+      "SourceId": "ISO_ERP",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\",
+      "BasePath": "_content/ISO_ERP",
+      "RelativePath": "download.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\download.js"
     },
     {
       "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\favicon.png",

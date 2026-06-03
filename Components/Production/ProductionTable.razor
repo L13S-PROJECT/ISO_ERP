@@ -90,7 +90,8 @@
 
                 <input type="checkbox"
                     checked="@IsSelectedForPrint(item)"
-                    @onchange="async () => await TogglePrintSelection.InvokeAsync(item.Id)" />
+                    @onchange="async () => await TogglePrintSelection.InvokeAsync(item.Id)"
+                    @onclick:stopPropagation="true" />
 
             </td>
 

@@ -359,11 +359,14 @@
     
     private void SelectProduct(Product product)
         {
+            NewProduction.ProductId = product.Id;
+
             NewProduction.ProductName = product.Name;
 
             NewProduction.ProductCode = product.Code;
 
             filteredProducts.Clear();
+
             invalidProduct = false;
         }
     

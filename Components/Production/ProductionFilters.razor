@@ -67,9 +67,9 @@
     </button>
 
     <button class="btn btn-primary"
-        @onclick="() => OpenPrintPreview.InvokeAsync()">
-            Printēt
-        </button>
+        @onclick="() => GeneratePdf.InvokeAsync()">
+        Printēt PDF
+    </button>
 
 </div>
 
@@ -98,6 +98,9 @@
 
     [Parameter]
     public EventCallback OpenPrintPreview { get; set; }
+
+    [Parameter]
+    public EventCallback GeneratePdf { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
         {

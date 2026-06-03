@@ -177,6 +177,9 @@ namespace ISO_ERP.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -191,6 +194,8 @@ namespace ISO_ERP.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Productions");
                 });
@@ -247,6 +252,15 @@ namespace ISO_ERP.Migrations
                         .IsRequired();
 
                     b.Navigation("Detail");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ISO_ERP.Models.Production", b =>
+                {
+                    b.HasOne("ISO_ERP.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
                 });
