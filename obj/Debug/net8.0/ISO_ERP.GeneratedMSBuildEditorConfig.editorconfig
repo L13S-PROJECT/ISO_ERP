@@ -50,10 +50,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductToolbar.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RUb29sYmFyLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Projects/ISO_ERP/ISO_ERP/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -97,3 +93,7 @@ build_metadata.AdditionalFiles.CssScope = b-lb2xwyqmb2
 [C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductEditModal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RFZGl0TW9kYWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-zlm13ff7v9
+
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Product/ProductToolbar.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQcm9kdWN0XFByb2R1Y3RUb29sYmFyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-yksd8qkdnb

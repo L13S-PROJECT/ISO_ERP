@@ -25,8 +25,9 @@
 
     <thead>
         <tr>
-            <th>Kods</th>
             <th>Nosaukums</th>
+            <th>Kods</th>
+            <th>Detaļas</th>
             <th>Kategorija</th>
             <th>Statuss</th>
             <th></th>
@@ -38,9 +39,24 @@
     @foreach (var item in products)
     {
         <tr>
-            <td>@item.Code</td>
-
+            
             <td>@item.Name</td>
+            <td>@item.Code</td>
+            
+           <td> 
+            @if (item.ProductDetails.Count == 0)
+                {
+                    <span class="badge bg-danger">
+                        Nav detaļu
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-success">
+                        @item.ProductDetails.Count detaļas
+                    </span>
+                }
+            </td>
 
             <td>
                 @(item.Category?.Name ?? "-")
@@ -50,7 +66,7 @@
                 @(item.IsActive ? "Aktīva" : "Neaktīva")
             </td>
 
-            <td>
+            
                 <td>
 
                 <button class="btn btn-sm btn-secondary"
@@ -64,7 +80,7 @@
             </button>
 
             </td>
-            </td>
+            
         </tr>
     }
 

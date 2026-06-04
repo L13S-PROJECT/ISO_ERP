@@ -194,6 +194,11 @@
                         {
                             query = query.Where(x => x.IsCompleted);
                         }
+                    
+                    if (ShowPrintedOnly)
+                        {
+                            query = query.Where(x => x.IsPrinted);
+                        }
 
                     return query
                         .OrderBy(x => new string((x.BatchNo ?? "").TakeWhile(char.IsLetter).ToArray()))

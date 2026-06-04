@@ -8,11 +8,8 @@ namespace ISO_ERP.PDF.Components;
 public static class ProductionProtocolPage2
 {
     public static void Compose(
-            IContainer container,
-            Production production,
-            int startIndex,
-            int endIndex,
-            bool showTopInfo)
+        IContainer container,
+        Production production)
     {
         container.Column(column =>
         {
@@ -28,7 +25,7 @@ public static class ProductionProtocolPage2
 
             // TOP INFO AREA
 
-                if (showTopInfo)
+                if (true)
 {
                 column.Item()
                     .PaddingBottom(2)
@@ -61,8 +58,20 @@ public static class ProductionProtocolPage2
 }
             // MAIN TABLE
 
-            column.Item()
-                .Table(table =>
+            int rowsPerBlock = 40;
+
+            for (int blockStart = 1; blockStart <= production.Quantity; blockStart += rowsPerBlock)
+            {
+                int blockEnd = Math.Min(blockStart + rowsPerBlock - 1, production.Quantity);
+
+            if (blockStart > 1)
+                {
+                    column.Item().PageBreak();
+                }
+
+    column.Item()
+        .Table(table =>
+        {
                 {
                     table.ColumnsDefinition(columns =>
                     {
@@ -88,13 +97,21 @@ public static class ProductionProtocolPage2
 
                     int rowHeight;
 
-                            if (production.Quantity <= 43)
+                            if (production.Quantity <= 20)
+                            {
+                                rowHeight = 28;
+                            }
+                            else if (production.Quantity <= 30)
+                            {
+                                rowHeight = 22;
+                            }
+                            else if (production.Quantity <= 43)
                             {
                                 rowHeight = 16;
                             }
                             else
                             {
-                                rowHeight = 18;
+                                rowHeight = 16;
                             }
 
                     void BodyCell(string text = "", bool isCupCode = false)
@@ -129,29 +146,36 @@ public static class ProductionProtocolPage2
                             HeaderCell("Piezīmes");
                         });
 
-                    for (int i = startIndex; i <= endIndex; i++)
-                    {
-                        BodyCell(i.ToString());
-
-                        BodyCell($"{production.BatchNo}{production.ProductCode}{i}", true);
-
-                        BodyCell();
-
-                        table.Cell()
-                            .Border(1)
-                            .MinHeight(rowHeight)
-                            .AlignCenter()
-                            .AlignMiddle()
-                            .Element(x =>
+                        for (int i = blockStart; i <= blockEnd; i++)
                             {
-                                x.Width(14)
-                                    .Height(14)
-                                    .Border(1.5f);
-                            });
+                                BodyCell(i.ToString());
 
-                        BodyCell();
-                    }
+                                BodyCell($"{production.BatchNo}{production.ProductCode}{i}", true);
+
+                                BodyCell();
+
+                                table.Cell()
+                                    .Border(1)
+                                    .MinHeight(rowHeight)
+                                    .AlignCenter()
+                                    .AlignMiddle()
+                                    .Element(x =>
+                                    {
+                                        x.Width(14)
+                                            .Height(14)
+                                            .Border(1.5f);
+                                    });
+
+                                BodyCell();
+                            }
+
+                            
+                        }
+                
                 });
+
+    
+            }
         });
     }
 }

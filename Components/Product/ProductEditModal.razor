@@ -39,6 +39,8 @@
 
         <input class="form-input"
             placeholder="Ieraksti nosaukumu"
+            autocomplete="off"
+            spellcheck="false"
             @bind="productName" />
     </div>
 
@@ -46,8 +48,10 @@
         <label>KODS</label>
 
         <input class="form-input"
-               placeholder="Ieraksti kodu"
-               @bind="productCode" />
+            placeholder="Ieraksti kodu"
+            autocomplete="off"
+            spellcheck="false"
+            @bind="productCode" />
     </div>
 
     <div class="form-row notes-row">
@@ -174,7 +178,7 @@
 
             StateHasChanged();
 
-            await Task.Delay(1000);
+            await Task.Delay(500);
 
             await OnClose.InvokeAsync();
         }

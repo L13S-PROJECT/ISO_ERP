@@ -313,6 +313,14 @@ private async Task GeneratePdf()
 
     var pdfBytes = await ProductionPdfService
         .GenerateProductionPdf(SelectedProductionsForPrint);
+    
+    foreach (var item in SelectedProductionsForPrint)
+        {
+            item.PrintedDate = DateTime.Now;
+            item.IsPrinted = true;
+
+            await ProductionService.UpdateAsync(item);
+        }
 
     var fileName = $"production-{DateTime.Now:yyyyMMdd-HHmm}.pdf";
 
@@ -321,6 +329,9 @@ private async Task GeneratePdf()
         fileName,
         Convert.ToBase64String(pdfBytes)
     );
+
+    StateHasChanged();
+    selectedForPrintIds.Clear();
 }
 
 }

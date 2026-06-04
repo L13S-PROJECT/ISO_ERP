@@ -4,6 +4,7 @@ using ISO_ERP.Data;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace ISO_ERP.Services;
 
@@ -18,22 +19,23 @@ public class ProductionPdfService
                 .ThenInclude(x => x.Detail)
             .ToListAsync();
 
-        var document = Document.Create(container =>
-        {
-            foreach (var production in productions)
-            {
-                var product = products
-                    .FirstOrDefault(x => x.Id == production.ProductId);
+       var documents = new List<QuestPDF.Infrastructure.IDocument>();
 
-                var protocolDocument = new ProductionProtocolDocument(
-                    production,
-                    product);
+foreach (var production in productions)
+{
+    var product = products
+        .FirstOrDefault(x => x.Id == production.ProductId);
 
-                protocolDocument.Compose(container);
-            }
-        });
+    documents.Add(
+        new ProductionProtocolDocument(
+            production,
+            product));
+}
 
-        return document.GeneratePdf();
+var mergedDocument = Document.Merge(documents);
+
+return mergedDocument.GeneratePdf();
+
     }
 
     private readonly IDbContextFactory<AppDbContext> _contextFactory;

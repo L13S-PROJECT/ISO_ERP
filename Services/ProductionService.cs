@@ -49,6 +49,9 @@ namespace ISO_ERP.Services
 
                 existing.IsCompleted = production.FinishedDate != null;
 
+                existing.PrintedDate = production.PrintedDate;
+                existing.IsPrinted = production.IsPrinted;
+
                 await context.SaveChangesAsync();
             }
 

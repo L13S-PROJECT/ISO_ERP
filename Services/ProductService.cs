@@ -17,8 +17,11 @@ namespace ISO_ERP.Services
             {
                 return await _context.Products
                     .AsNoTracking()
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductDetails)
                     .Where(x => x.IsActive)
-                    .OrderBy(x => x.Name)
+                    .OrderBy(x => x.Category != null ? x.Category.Name : "")
+                    .ThenBy(x => x.Name)
                     .ToListAsync();
             }
 

@@ -38,6 +38,7 @@
         <label>Produkta nosaukums</label>
 
         <input id="productInput"
+                autocomplete="off"
                 @ref="productInput"
                 class="form-control @(invalidProduct ? "is-invalid" : "")"
                 title="@NewProduction.ProductName"

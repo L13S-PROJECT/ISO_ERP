@@ -173,6 +173,7 @@ C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Production\Pro
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Production\ProductionTable.razor.rz.scp.css
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Product\ProductCreateModal.razor.rz.scp.css
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Product\ProductEditModal.razor.rz.scp.css
+C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Product\ProductToolbar.razor.rz.scp.css
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\bundle\ISO_ERP.styles.css
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\projectbundle\ISO_ERP.bundle.scp.css
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\ISO_ERP.csproj.Up2Date
