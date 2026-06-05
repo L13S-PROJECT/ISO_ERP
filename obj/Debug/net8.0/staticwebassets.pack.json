@@ -25,6 +25,18 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO.png",
+      "PackagePath": "staticwebassets\\icons\\ISO_LOGO.png"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\manifest.json",
+      "PackagePath": "staticwebassets\\manifest.json"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\service-worker.js",
+      "PackagePath": "staticwebassets\\service-worker.js"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ISO_ERP.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

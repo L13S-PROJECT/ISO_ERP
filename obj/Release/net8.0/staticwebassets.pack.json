@@ -1,0 +1,57 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\obj\\Release\\net8.0\\scopedcss\\projectbundle\\ISO_ERP.bundle.scp.css",
+      "PackagePath": "staticwebassets\\ISO_ERP.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\download.js",
+      "PackagePath": "staticwebassets\\download.js"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO.png",
+      "PackagePath": "staticwebassets\\icons\\ISO_LOGO.png"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\manifest.json",
+      "PackagePath": "staticwebassets\\manifest.json"
+    },
+    {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\service-worker.js",
+      "PackagePath": "staticwebassets\\service-worker.js"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.ISO_ERP.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.build.ISO_ERP.props",
+      "PackagePath": "build\\ISO_ERP.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.ISO_ERP.props",
+      "PackagePath": "buildMultiTargeting\\ISO_ERP.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildTransitive.ISO_ERP.props",
+      "PackagePath": "buildTransitive\\ISO_ERP.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
