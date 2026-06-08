@@ -1,0 +1,13 @@
+services:
+  iso_erp:
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    container_name: iso_erp
+    working_dir: /app
+    command: ["dotnet", "ISO_ERP.dll"]
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: "http://+:8080"
+    volumes:
+      - /volume1/docker/iso_erp:/app
+    restart: unless-stopped

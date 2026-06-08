@@ -71,6 +71,11 @@
         Printēt PDF
     </button>
 
+    <button class="btn btn-success"
+        @onclick="() => ExportExcel.InvokeAsync()">
+        Eksportēt Excel
+    </button>
+
 </div>
 
 @code {
@@ -101,6 +106,9 @@
 
     [Parameter]
     public EventCallback GeneratePdf { get; set; }
+
+    [Parameter]
+    public EventCallback ExportExcel { get; set; }
 
     private async Task OnSearchInput(ChangeEventArgs e)
         {

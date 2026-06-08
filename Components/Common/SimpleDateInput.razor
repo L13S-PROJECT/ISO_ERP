@@ -5,7 +5,7 @@
        @oninput="HandleInput"
        @onblur="HandleBlur"
        @onkeydown="HandleKeyDown"
-       @onkeydown:preventDefault="PreventTab"
+       @onkeydown:preventDefault="false"
        inputmode="numeric"
        autocomplete="off"
        placeholder="dd/mm/yyyy"
@@ -32,14 +32,13 @@
     private string Text = "";
 
     private bool HasError;
-    private bool PreventTab;
-
+    
     protected override void OnParametersSet()
     {
         Text = Value?.ToString("dd/MM/yyyy") ?? "";
     }
 
-    private async Task HandleInput(ChangeEventArgs e)
+    private Task HandleInput(ChangeEventArgs e)
     {
         var raw = new string(
             (e.Value?.ToString() ?? "")
@@ -57,6 +56,7 @@
             Text = raw;
 
         HasError = false;
+        return Task.CompletedTask;
     }
 
     private async Task HandleBlur(FocusEventArgs e)

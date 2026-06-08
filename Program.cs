@@ -1,10 +1,15 @@
 using ISO_ERP.Components;
 using Microsoft.EntityFrameworkCore;
+using Photino.Blazor;
+using QuestPDF.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+QuestPDF.Settings.License = LicenseType.Community;
+QuestPDF.Settings.EnableDebugging = true;
+
+//QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 builder.Services.AddDbContextFactory<ISO_ERP.Data.AppDbContext>(options =>
     options.UseMySql(
@@ -20,6 +25,8 @@ builder.Services.AddScoped<ISO_ERP.Services.DetailService>();
 builder.Services.AddScoped<ISO_ERP.Services.ProductionService>();
 builder.Services.AddScoped<ISO_ERP.Services.InspectorService>();
 builder.Services.AddScoped<ISO_ERP.Services.ProductionPdfService>();
+builder.Services.AddScoped<ISO_ERP.Services.ProductionExcelService>();
+builder.Services.AddScoped<ISO_ERP.Services.AuthService>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

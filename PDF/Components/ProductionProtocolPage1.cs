@@ -23,23 +23,13 @@ public static class ProductionProtocolPage1
                 .Text("Ražošanas kvalitātes kontroles protokols (FCP)")
                 .FontSize(20)
                 .Bold();
-
+        
             // DATE
 
             column.Item()
-                .AlignRight()
-                .Row(row =>
-                {
-                    row.ConstantItem(55)
-                        .Text("Datums")
-                        .Bold();
-
-                    row.ConstantItem(95)
-                        .Text($"{production.StartDate:dd.MM.yyyy}")
-                        .Bold()
-                        .Underline();
-                });
-
+                    .AlignRight()
+                    .Text($"Datums: {production.StartDate:dd.MM.yyyy}")
+                    .Bold();
             // TOP TABLE
 
             column.Item()
@@ -107,6 +97,7 @@ public static class ProductionProtocolPage1
                         .LineColor(Colors.Grey.Lighten1);
                 }
 
+            
                         // SECTION TITLE
 
             column.Item()
@@ -182,6 +173,7 @@ public static class ProductionProtocolPage1
 
                         }
                 });
+    
 
                         // SECTION TITLE
 

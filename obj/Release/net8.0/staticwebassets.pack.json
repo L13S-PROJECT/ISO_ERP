@@ -9,6 +9,10 @@
       "PackagePath": "staticwebassets\\app.css"
     },
     {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\blueprint.svg",
+      "PackagePath": "staticwebassets\\blueprint.svg"
+    },
+    {
       "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css"
     },

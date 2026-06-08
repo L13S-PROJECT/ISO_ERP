@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+
+    <defs>
+        <style>
+            .line {
+                stroke:#1e90ff;
+                stroke-width:1;
+                fill:none;
+                opacity:.22;
+            }
+
+            .thin {
+                stroke:#1e90ff;
+                stroke-width:.5;
+                fill:none;
+                opacity:.15;
+            }
+
+            .txt {
+                fill:#1e90ff;
+                opacity:.22;
+                font-size:18px;
+                font-family:Arial;
+            }
+        </style>
+    </defs>
+
+    <!-- Zobrats 1 -->
+
+    <circle class="line" cx="220" cy="240" r="120"/>
+    <circle class="line" cx="220" cy="240" r="80"/>
+    <circle class="line" cx="220" cy="240" r="25"/>
+
+    <g class="line">
+        <line x1="220" y1="120" x2="220" y2="80"/>
+        <line x1="220" y1="360" x2="220" y2="400"/>
+        <line x1="100" y1="240" x2="60" y2="240"/>
+        <line x1="340" y1="240" x2="380" y2="240"/>
+
+        <line x1="135" y1="155" x2="105" y2="125"/>
+        <line x1="305" y1="325" x2="335" y2="355"/>
+
+        <line x1="305" y1="155" x2="335" y2="125"/>
+        <line x1="135" y1="325" x2="105" y2="355"/>
+    </g>
+
+    <!-- Zobrats 2 -->
+
+    <circle class="line" cx="380" cy="520" r="95"/>
+    <circle class="line" cx="380" cy="520" r="55"/>
+    <circle class="line" cx="380" cy="520" r="18"/>
+
+    <!-- Rasējuma detaļa -->
+
+    <rect class="line"
+          x="90"
+          y="760"
+          width="420"
+          height="80"/>
+
+    <rect class="line"
+          x="510"
+          y="780"
+          width="120"
+          height="40"/>
+
+    <line class="line"
+          x1="90"
+          y1="730"
+          x2="630"
+          y2="730"/>
+
+    <line class="line"
+          x1="90"
+          y1="870"
+          x2="630"
+          y2="870"/>
+
+    <text class="txt" x="240" y="720">120</text>
+
+    <!-- Mehānisks mezgls -->
+
+    <rect class="line"
+          x="620"
+          y="150"
+          width="320"
+          height="180"/>
+
+    <circle class="line"
+            cx="780"
+            cy="240"
+            r="40"/>
+
+    <line class="line"
+          x1="620"
+          y1="150"
+          x2="940"
+          y2="330"/>
+
+    <line class="line"
+          x1="940"
+          y1="150"
+          x2="620"
+          y2="330"/>
+
+    <text class="txt" x="700" y="130">Ø 110</text>
+
+    <!-- Izmēru līnijas -->
+
+    <line class="thin"
+          x1="580"
+          y1="120"
+          x2="980"
+          y2="120"/>
+
+    <line class="thin"
+          x1="580"
+          y1="360"
+          x2="980"
+          y2="360"/>
+
+    <text class="txt" x="760" y="110">320</text>
+
+    <!-- Ēkas kontūra -->
+
+    <g class="line">
+
+        <polygon points="
+            1320,260
+            1680,430
+            1680,780
+            1320,610" />
+
+        <polygon points="
+            1220,330
+            1580,500
+            1580,850
+            1220,680" />
+
+        <line x1="1320" y1="260"
+              x2="1220" y2="330"/>
+
+        <line x1="1680" y1="430"
+              x2="1580" y2="500"/>
+
+        <line x1="1680" y1="780"
+              x2="1580" y2="850"/>
+
+    </g>
+
+    <!-- Centrālās konstrukcijas līnijas -->
+
+    <line class="thin"
+          x1="0"
+          y1="0"
+          x2="900"
+          y2="700"/>
+
+    <line class="thin"
+          x1="1920"
+          y1="0"
+          x2="1050"
+          y2="700"/>
+
+    <line class="thin"
+          x1="0"
+          y1="1080"
+          x2="900"
+          y2="380"/>
+
+    <line class="thin"
+          x1="1920"
+          y1="1080"
+          x2="1050"
+          y2="380"/>
+
+</svg>

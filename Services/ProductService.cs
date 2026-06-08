@@ -19,7 +19,6 @@ namespace ISO_ERP.Services
                     .AsNoTracking()
                     .Include(x => x.Category)
                     .Include(x => x.ProductDetails)
-                    .Where(x => x.IsActive)
                     .OrderBy(x => x.Category != null ? x.Category.Name : "")
                     .ThenBy(x => x.Name)
                     .ToListAsync();
@@ -104,6 +103,18 @@ namespace ISO_ERP.Services
                 return await _context.Products
                     .AsNoTracking()
                     .OrderBy(x => x.Name)
+                    .ToListAsync();
+            }
+        
+        public async Task<List<Product>> GetActiveAsync()
+            {
+                return await _context.Products
+                    .AsNoTracking()
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductDetails)
+                    .Where(x => x.IsActive)
+                    .OrderBy(x => x.Category != null ? x.Category.Name : "")
+                    .ThenBy(x => x.Name)
                     .ToListAsync();
             }
 

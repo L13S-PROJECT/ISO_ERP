@@ -18,9 +18,9 @@ namespace ISO_ERP.Services
                     using var context = await _contextFactory.CreateDbContextAsync();
 
                     return await context.Productions
-                        .OrderBy(x => x.StartDate)
-                        .ThenBy(x => x.BatchNo)
-                        .ThenBy(x => x.Id)
+                        .AsNoTracking()
+                        .OrderByDescending(x => x.StartDate)
+                        .ThenByDescending(x => x.Id)
                         .ToListAsync();
                 }
 

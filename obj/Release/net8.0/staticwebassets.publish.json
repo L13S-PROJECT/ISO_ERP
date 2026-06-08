@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "GxgZsa5apMmL9pOoJBQ5c5oNfegPqij5rZu7W+3gw7w=",
+  "Hash": "131CaiaVga7mYo4pgPref2FKLYo+xoQoWE+Yotj4Shw=",
   "Source": "ISO_ERP",
   "BasePath": "_content/ISO_ERP",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\app.css"
+    },
+    {
+      "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\blueprint.svg",
+      "SourceId": "ISO_ERP",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\",
+      "BasePath": "_content/ISO_ERP",
+      "RelativePath": "blueprint.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\blueprint.svg"
     },
     {
       "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\bootstrap\\bootstrap.min.css",

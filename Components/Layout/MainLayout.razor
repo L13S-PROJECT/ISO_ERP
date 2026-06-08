@@ -1,16 +1,24 @@
-﻿@inherits LayoutComponentBase
+﻿
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@inject ISO_ERP.Services.AuthService AuthService
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+
+    @if (!Navigation.Uri.Contains("/login"))
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
 
     <main>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
+
 </div>
 
 <div id="blazor-error-ui">
@@ -18,3 +26,26 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        if (Navigation.Uri.EndsWith("/"))
+        {
+            Navigation.NavigateTo("/login", true);
+        }
+    }
+
+    protected override void OnParametersSet()
+{
+    var isLoginPage =
+        Navigation.Uri.Contains("/login");
+
+    if (!AuthService.IsLoggedIn && !isLoginPage)
+    {
+        Navigation.NavigateTo("/login");
+    }
+}
+
+}

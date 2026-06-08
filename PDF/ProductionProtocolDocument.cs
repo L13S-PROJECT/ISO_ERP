@@ -68,14 +68,14 @@ public class ProductionProtocolDocument : IDocument
 
             // PAGE 2
 
-            container.Page(page =>
+        container.Page(page =>
                 {
                     page.Size(PageSizes.A4);
 
                     page.MarginHorizontal(40);
                     page.MarginVertical(25);
 
-                    page.DefaultTextStyle(x => x.FontSize(12));
+                     page.DefaultTextStyle(x => x.FontSize(12));
 
                     page.Header()
                         .PaddingBottom(10)
@@ -106,7 +106,7 @@ public class ProductionProtocolDocument : IDocument
 
                             text.Span(" no ");
 
-                            text.TotalPages();
+                           text.TotalPages();
                         });
                 });
         }

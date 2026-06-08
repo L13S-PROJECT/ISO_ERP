@@ -69,7 +69,7 @@
                         @foreach (var item in filteredProducts.Select((product, index) => new { product, index }))
                         {
                             <div id="product-item-@item.index"
-                                class="p-2 border-bottom autocomplete-item
+                                class="p-1 border-bottom autocomplete-item
                                         @(selectedProductIndex == item.index ? "bg-primary text-white" : "")"
                                 @onclick="(() => SelectProduct(item.product))">
 
@@ -275,8 +275,7 @@
 
     private int selectedProductIndex = -1;
 
-    private int? editingProductionId = null!;
-    private bool ValidateForm()
+        private bool ValidateForm()
 {
     invalidBatchNo = string.IsNullOrWhiteSpace(NewProduction.BatchNo);
 
@@ -290,9 +289,20 @@
         }
         else
         {
-            invalidProduct = !Products.Any(x =>
-                x.Name == NewProduction.ProductName &&
-                x.Code == NewProduction.ProductCode);
+            var matchedProduct = Products.FirstOrDefault(x =>
+                string.Equals(
+                    x.Name.Trim(),
+                    NewProduction.ProductName.Trim(),
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (matchedProduct != null)
+            {
+                NewProduction.ProductId = matchedProduct.Id;
+                NewProduction.ProductName = matchedProduct.Name;
+                NewProduction.ProductCode = matchedProduct.Code;
+            }
+
+            invalidProduct = matchedProduct == null;
         }
 
     invalidQuantity = NewProduction.Quantity <= 0;
@@ -431,11 +441,22 @@
                     return;
                 }
 
-            var exists = Products.Any(x =>
-                x.Name == NewProduction.ProductName &&
-                x.Code == NewProduction.ProductCode);
+            var matchedProduct = Products.FirstOrDefault(x =>
+                    string.Equals(
+                        x.Name.Trim(),
+                        NewProduction.ProductName.Trim(),
+                        StringComparison.OrdinalIgnoreCase));
 
-            invalidProduct = !exists;
+                if (matchedProduct != null)
+                    {
+                        NewProduction.ProductId = matchedProduct.Id;
+                        NewProduction.ProductName = matchedProduct.Name;
+                        NewProduction.ProductCode = matchedProduct.Code;
+                    }
+
+                invalidProduct = matchedProduct == null;
+
+        
         }
     
     private async Task OnStartDateChanged(DateTime? value)
@@ -479,8 +500,6 @@
     NewProduction.Quantity = 0;
 
     _ = IsEditModeChanged.InvokeAsync(false);
-
-    editingProductionId = null!;
 
     NewProduction.FinishedDate = null;
 

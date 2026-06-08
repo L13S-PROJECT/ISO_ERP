@@ -66,6 +66,10 @@ build_metadata.AdditionalFiles.CssScope = b-b99acsmccz
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-gipl7qeqd9
 
+[C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-k8kllcc1mu
+
 [C:/Projects/ISO_ERP/ISO_ERP/Components/Pages/Productions.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQcm9kdWN0aW9ucy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-2oqtjwt8xu

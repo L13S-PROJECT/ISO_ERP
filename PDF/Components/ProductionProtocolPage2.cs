@@ -47,7 +47,8 @@ public static class ProductionProtocolPage2
                                         .PaddingLeft(0)
                                         .BorderBottom(0.7f)
                                         .BorderColor(Colors.Grey.Medium)
-                                        .Height(16);
+                                        .Height(16)
+                                        .Text("");
                                 });
                         }
 
