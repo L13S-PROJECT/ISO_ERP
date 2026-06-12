@@ -450,3 +450,9 @@ input[type="date"]:invalid[b-zuwwru6cqi]::-webkit-datetime-edit {
     color: #b02a37 !important;
     font-weight: 600;
 }
+
+.table-disabled[b-zuwwru6cqi]
+{
+    opacity: 0.5;
+    pointer-events: none;
+}

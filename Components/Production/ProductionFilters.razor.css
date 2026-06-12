@@ -443,3 +443,18 @@ input[type="date"]:invalid::-webkit-datetime-edit {
 .production-table tbody tr.selected-row {
     background-color: #cfd4da !important;
 }
+
+.production-filter-checkboxes {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+}
+
+.production-filter-checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+}

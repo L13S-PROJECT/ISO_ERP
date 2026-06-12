@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TZVUGVyxdGbkULTZebOYl2zZ8NcqY1Y3FAGSjrHdESQ=",
+  "Hash": "lGibgqLOID89HM5iSkIr+f0RlX8OW158vSqG0VmnN3A=",
   "Source": "ISO_ERP",
   "BasePath": "_content/ISO_ERP",
   "Mode": "Default",
@@ -167,6 +167,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.png"
+    },
+    {
+      "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO-512.png",
+      "SourceId": "ISO_ERP",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\",
+      "BasePath": "_content/ISO_ERP",
+      "RelativePath": "icons/ISO_LOGO-512.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\icons\\ISO_LOGO-512.png"
     },
     {
       "Identity": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO.png",

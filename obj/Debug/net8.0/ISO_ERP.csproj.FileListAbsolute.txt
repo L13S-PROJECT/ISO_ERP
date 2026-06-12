@@ -214,14 +214,3 @@ C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\ISO_ERP.pdb
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\ISO_ERP.genruntimeconfig.cache
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\ref\ISO_ERP.dll
 C:\Projects\ISO_ERP\ISO_ERP\obj\Debug\net8.0\scopedcss\Components\Pages\Login.razor.rz.scp.css
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-arm\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-arm64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-loongarch64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-musl-arm\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-musl-arm64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-musl-loongarch64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-musl-riscv64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-musl-x64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-riscv64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-x64\native\libSkiaSharp.so
-C:\Projects\ISO_ERP\ISO_ERP\bin\Debug\net8.0\runtimes\linux-x86\native\libSkiaSharp.so

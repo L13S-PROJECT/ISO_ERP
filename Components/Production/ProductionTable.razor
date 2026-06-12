@@ -2,7 +2,7 @@
 
 @using ISO_ERP.Models
 
-<div class="production-table-container">
+<div class="production-table-container @(IsEditMode ? "table-disabled" : "")">
 
 <table class="table table-striped mt-3 erp-entry-table production-table">
 
@@ -143,9 +143,10 @@
     [Parameter] public DateTime? FilterDateTo { get; set; }
 
     [Parameter] public bool ShowCompletedOnly { get; set; }
-
+    [Parameter] public bool ShowIncompleteOnly { get; set; }
     [Parameter] public bool ShowPrintedOnly { get; set; }
-
+    [Parameter] public bool ShowNotPrintedOnly { get; set; }
+    [Parameter] public bool IsEditMode { get; set; }
     [Parameter] public Production NewProduction { get; set; } = new();
 
     [Parameter] public EventCallback<Production> StartEdit { get; set; }
@@ -195,9 +196,19 @@
                             query = query.Where(x => x.IsCompleted);
                         }
                     
-                    if (ShowPrintedOnly)
+                    if (ShowIncompleteOnly)
+                        {
+                            query = query.Where(x => !x.IsCompleted);
+                        }
+                                        
+                    if (ShowPrintedOnly && !ShowNotPrintedOnly)
                         {
                             query = query.Where(x => x.IsPrinted);
+                        }
+
+                    if (ShowNotPrintedOnly && !ShowPrintedOnly)
+                        {
+                            query = query.Where(x => !x.IsPrinted);
                         }
 
                     return query

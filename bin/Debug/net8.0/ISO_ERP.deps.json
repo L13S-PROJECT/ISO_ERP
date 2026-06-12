@@ -12,8 +12,7 @@
           "Microsoft.EntityFrameworkCore.Design": "9.0.8",
           "Photino.Blazor": "4.0.13",
           "Pomelo.EntityFrameworkCore.MySql": "9.0.0",
-          "QuestPDF": "2026.5.0",
-          "SkiaSharp.NativeAssets.Linux.NoDependencies": "3.119.1"
+          "QuestPDF": "2026.5.0"
         },
         "runtime": {
           "ISO_ERP.dll": {}
@@ -991,65 +990,6 @@
           }
         }
       },
-      "SkiaSharp.NativeAssets.Linux.NoDependencies/3.119.1": {
-        "runtimeTargets": {
-          "runtimes/linux-arm/native/libSkiaSharp.so": {
-            "rid": "linux-arm",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-arm64/native/libSkiaSharp.so": {
-            "rid": "linux-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-loongarch64/native/libSkiaSharp.so": {
-            "rid": "linux-loongarch64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-arm/native/libSkiaSharp.so": {
-            "rid": "linux-musl-arm",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-arm64/native/libSkiaSharp.so": {
-            "rid": "linux-musl-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-loongarch64/native/libSkiaSharp.so": {
-            "rid": "linux-musl-loongarch64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-riscv64/native/libSkiaSharp.so": {
-            "rid": "linux-musl-riscv64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-musl-x64/native/libSkiaSharp.so": {
-            "rid": "linux-musl-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-riscv64/native/libSkiaSharp.so": {
-            "rid": "linux-riscv64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-x64/native/libSkiaSharp.so": {
-            "rid": "linux-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/linux-x86/native/libSkiaSharp.so": {
-            "rid": "linux-x86",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
       "System.CodeDom/6.0.0": {
         "runtime": {
           "lib/net6.0/System.CodeDom.dll": {
@@ -1598,13 +1538,6 @@
       "sha512": "sha512-LFQsCZlV0xlUyXAOMUo5kkSl+8zAQXXbbdwWchtk0B4o7zotZhQsQOcJUELGHdfPfm/xDAsz6hONAuV25bJaAg==",
       "path": "sixlabors.fonts/1.0.0",
       "hashPath": "sixlabors.fonts.1.0.0.nupkg.sha512"
-    },
-    "SkiaSharp.NativeAssets.Linux.NoDependencies/3.119.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-5jj6gBCe4K6TLnIERBXZfmUNE0TUyeTaF28RCxdCgIDVDaCAbHwEbk99eNYRFem/ubW/hKdvayZBOt6PaDL05g==",
-      "path": "skiasharp.nativeassets.linux.nodependencies/3.119.1",
-      "hashPath": "skiasharp.nativeassets.linux.nodependencies.3.119.1.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

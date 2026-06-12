@@ -47,6 +47,8 @@
             CssClass="form-control" />
     </div>
 
+<div class="production-filter-checkboxes">
+
     <label>
         <input type="checkbox"
                checked="@ShowCompletedOnly"
@@ -60,6 +62,23 @@
                @onchange="async e => await ShowPrintedOnlyChanged.InvokeAsync((bool)e.Value!)" />
         Izprintēti
     </label>
+
+    <label>
+        <input type="checkbox"
+            checked="@ShowIncompleteOnly"
+            @onchange="async e => await ShowIncompleteOnlyChanged.InvokeAsync((bool)e.Value!)" />
+        Nepabeigti
+    </label>
+
+    
+
+    <label>
+        <input type="checkbox"
+            checked="@ShowNotPrintedOnly"
+            @onchange="async e => await ShowNotPrintedOnlyChanged.InvokeAsync((bool)e.Value!)" />
+        Neizprintēti
+    </label>
+</div>
 
     <button class="btn btn-secondary"
             @onclick="OnClearFilters">
@@ -93,9 +112,17 @@
 
     [Parameter] public bool ShowCompletedOnly { get; set; }
     [Parameter] public EventCallback<bool> ShowCompletedOnlyChanged { get; set; }
+    
+    [Parameter] public bool ShowIncompleteOnly { get; set; }
+
+    [Parameter] public EventCallback<bool> ShowIncompleteOnlyChanged { get; set; }
 
     [Parameter] public bool ShowPrintedOnly { get; set; }
     [Parameter] public EventCallback<bool> ShowPrintedOnlyChanged { get; set; }
+
+    [Parameter] public bool ShowNotPrintedOnly { get; set; }
+
+    [Parameter] public EventCallback<bool> ShowNotPrintedOnlyChanged { get; set; }
 
     [Parameter] public List<Product> AllProducts { get; set; } = new();
 

@@ -1401,6 +1401,11 @@ input[type="date"]:invalid[b-troiw75s9k]::-webkit-datetime-edit {
     font-size: 13px;
     font-weight: 600;
 }
+
+.edit-mode-panel[b-troiw75s9k] {
+    border: 2px solid #dc3545;
+    box-shadow: 0 0 0 3px rgba(220,53,69,0.15);
+}
 /* _content/ISO_ERP/Components/Production/ProductionFilters.razor.rz.scp.css */
 /* productions.razor.css */
 
@@ -1846,6 +1851,21 @@ input[type="date"]:invalid[b-azxgllsypv]::-webkit-datetime-edit {
 
 .production-table tbody tr.selected-row[b-azxgllsypv] {
     background-color: #cfd4da !important;
+}
+
+.production-filter-checkboxes[b-azxgllsypv] {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+}
+
+.production-filter-checkboxes label[b-azxgllsypv] {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
 }
 /* _content/ISO_ERP/Components/Production/ProductionTable.razor.rz.scp.css */
 /* productions.razor.css */
@@ -2299,6 +2319,12 @@ input[type="date"]:invalid[b-zuwwru6cqi]::-webkit-datetime-edit {
 .production-table tbody tr.delete-row td[b-zuwwru6cqi] {
     color: #b02a37 !important;
     font-weight: 600;
+}
+
+.table-disabled[b-zuwwru6cqi]
+{
+    opacity: 0.5;
+    pointer-events: none;
 }
 /* _content/ISO_ERP/Components/Product/ProductCreateModal.razor.rz.scp.css */
 .product-modal-overlay[b-lb2xwyqmb2] {

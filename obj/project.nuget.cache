@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RgmPPKgHnL8=",
+  "dgSpecHash": "XqY36wRAbBA=",
   "success": true,
   "projectFilePath": "C:\\Projects\\ISO_ERP\\ISO_ERP\\ISO_ERP.csproj",
   "expectedPackageFiles": [
@@ -63,7 +63,6 @@
     "C:\\Users\\Lietotajs\\.nuget\\packages\\questpdf\\2026.5.0\\questpdf.2026.5.0.nupkg.sha512",
     "C:\\Users\\Lietotajs\\.nuget\\packages\\rbush.signed\\4.0.0\\rbush.signed.4.0.0.nupkg.sha512",
     "C:\\Users\\Lietotajs\\.nuget\\packages\\sixlabors.fonts\\1.0.0\\sixlabors.fonts.1.0.0.nupkg.sha512",
-    "C:\\Users\\Lietotajs\\.nuget\\packages\\skiasharp.nativeassets.linux.nodependencies\\3.119.1\\skiasharp.nativeassets.linux.nodependencies.3.119.1.nupkg.sha512",
     "C:\\Users\\Lietotajs\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\Lietotajs\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",
     "C:\\Users\\Lietotajs\\.nuget\\packages\\system.composition\\7.0.0\\system.composition.7.0.0.nupkg.sha512",

@@ -19,7 +19,7 @@ public class ProductionPdfService
                 .ThenInclude(x => x.Detail)
             .ToListAsync();
 
-       var documents = new List<QuestPDF.Infrastructure.IDocument>();
+        var documents = new List<QuestPDF.Infrastructure.IDocument>();
 
 foreach (var production in productions)
 {
@@ -32,9 +32,10 @@ foreach (var production in productions)
             product));
 }
 
-var mergedDocument = Document.Merge(documents);
+// var mergedDocument = Document.Merge(documents);
 
-return mergedDocument.GeneratePdf();
+// return mergedDocument.GeneratePdf();
+return documents[0].GeneratePdf();
 
     }
 

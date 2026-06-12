@@ -443,3 +443,18 @@ input[type="date"]:invalid[b-azxgllsypv]::-webkit-datetime-edit {
 .production-table tbody tr.selected-row[b-azxgllsypv] {
     background-color: #cfd4da !important;
 }
+
+.production-filter-checkboxes[b-azxgllsypv] {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+}
+
+.production-filter-checkboxes label[b-azxgllsypv] {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+}

@@ -5,7 +5,7 @@
 
 @inject IJSRuntime JS
 
-<div class="erp-entry-panel"
+<div class="erp-entry-panel @(IsEditMode ? "edit-mode-panel" : "")"
      tabindex="0"
      @onkeydown="HandleEscape">
 
@@ -486,6 +486,7 @@
 
     private void ResetProductionEntry()
 {
+    
     filteredProducts.Clear();
 
     selectedProductIndex = -1;
@@ -514,6 +515,11 @@ private void ClearValidationState()
     invalidBatchNo = false;
     invalidQuantity = false;
     emptyProduct = false;
+
+    invalidStartDate = false;
+    invalidFinishedDate = false;
+    invalidInspector = false;
+    invalidFinishedDateRequired = false;
 }
 
 private async Task HandleEscape(KeyboardEventArgs e)
@@ -540,6 +546,8 @@ private bool CanSaveEdit =>
 
 private async Task CancelEdit()
 {
+    ClearValidationState();
+
     await CancelEditRequested.InvokeAsync();
 }
 

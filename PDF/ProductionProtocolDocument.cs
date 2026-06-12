@@ -3,6 +3,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using ISO_ERP.PDF.Components;
+using QuestPDF.Drawing;
 
 namespace ISO_ERP.PDF;
 
@@ -23,14 +24,25 @@ public class ProductionProtocolDocument : IDocument
 
     public void Compose(IDocumentContainer container)
         {
+            Console.WriteLine("PDF Compose START");
+            
+            // FontManager.RegisterFont(
+            //     File.OpenRead("arial.ttf"));
+
             container.Page(page =>
             {
+                Console.WriteLine("PDF Before Page");
+                
                 page.Size(PageSizes.A4);
 
                 page.MarginHorizontal(40);
                 page.MarginVertical(25);
 
-                page.DefaultTextStyle(x => x.FontSize(12));
+                // page.DefaultTextStyle(x => x.FontSize(12));dotnet publish -c Release
+
+                // page.DefaultTextStyle(x =>
+                //     x.FontFamily("DejaVu Sans")
+                //     .FontSize(12));
 
                 page.Header()
                         .PaddingBottom(10)
@@ -75,7 +87,11 @@ public class ProductionProtocolDocument : IDocument
                     page.MarginHorizontal(40);
                     page.MarginVertical(25);
 
-                     page.DefaultTextStyle(x => x.FontSize(12));
+                    //  page.DefaultTextStyle(x => x.FontSize(12));
+
+                    // page.DefaultTextStyle(x =>
+                    //     x.FontFamily("DejaVu Sans")
+                    //     .FontSize(12));
 
                     page.Header()
                         .PaddingBottom(10)

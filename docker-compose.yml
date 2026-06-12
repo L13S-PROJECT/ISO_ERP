@@ -1,6 +1,9 @@
 services:
   iso_erp:
-    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+
     container_name: iso_erp
     working_dir: /app
     command: ["dotnet", "ISO_ERP.dll"]
@@ -9,5 +12,6 @@ services:
     environment:
       ASPNETCORE_URLS: "http://+:8080"
     volumes:
-      - /volume1/docker/iso_erp:/app
+      - /volume1/docker/iso_erp:/app_old
+      - /volume1/ISO3834-3/03_R:/excel
     restart: unless-stopped

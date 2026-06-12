@@ -20,7 +20,7 @@ public static class ProductionProtocolPage2
             column.Item()
                 .AlignCenter()
                 .Text("KOMPLEKTĒŠANA - III posms")
-                .FontSize(14)
+                .FontSize(12)
                 .Bold();
 
             // TOP INFO AREA
@@ -38,7 +38,7 @@ public static class ProductionProtocolPage2
                             row.RelativeItem()
                                 .Row(inner =>
                                 {
-                                    inner.ConstantItem(48)
+                                    inner.ConstantItem(70)
                                         .Text($"{label}:")
                                         .Bold()
                                         .FontSize(11);

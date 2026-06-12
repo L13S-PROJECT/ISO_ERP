@@ -62,10 +62,6 @@
             "QuestPDF": {
               "target": "Package",
               "version": "[2026.5.0, )"
-            },
-            "SkiaSharp.NativeAssets.Linux.NoDependencies": {
-              "target": "Package",
-              "version": "[3.119.1, )"
             }
           },
           "imports": [

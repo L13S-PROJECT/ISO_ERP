@@ -13,8 +13,24 @@
 @inject ISO_ERP.Services.ProductionService ProductionService
 @inject ISO_ERP.Services.InspectorService InspectorService
 @inject NavigationManager Navigation
+@inject IConfiguration Configuration
 
 <h3>Ražošanas uzskaite</h3>
+
+@if (showExcelLockedMessage)
+{
+    <div class="alert alert-warning">
+        Dati saglabāti, bet Excel failu neizdevās atjaunot, jo tas ir atvērts.
+        Aizveriet Excel failu. Nākamajā datu izmaiņā Excel tiks atjaunots automātiski.  
+
+        <button type="button"
+                class="btn-close"
+                @onclick="() => showExcelLockedMessage = false">
+        </button>
+
+        
+    </div>
+}
 
 <ProductionEntryForm
     NewProduction="@newProduction"
@@ -43,14 +59,19 @@
     FilterDateToChanged="OnFilterDateToChanged"
     ShowCompletedOnly="@showCompletedOnly"
     ShowCompletedOnlyChanged="@(x => showCompletedOnly = x)"
+    ShowIncompleteOnly="@showIncompleteOnly"
+    ShowIncompleteOnlyChanged="@(x => showIncompleteOnly = x)"
     ShowPrintedOnly="@showPrintedOnly"
     ShowPrintedOnlyChanged="@(x => showPrintedOnly = x)"
+    ShowNotPrintedOnly="@showNotPrintedOnly"
+    ShowNotPrintedOnlyChanged="@(x => showNotPrintedOnly = x)"
     ClearFilters="ClearFilters"
     GeneratePdf="GeneratePdf"
     ExportExcel="ExportExcel" />
 
 <ProductionTable
     Productions="@productions"
+    IsEditMode="@isEditMode"
     SelectedProduction="@selectedProduction"
     SelectedProductionChanged="@(x => selectedProduction = x)"
     SearchText="@searchText"
@@ -58,7 +79,9 @@
     FilterDateFrom="@filterDateFrom"
     FilterDateTo="@filterDateTo"
     ShowCompletedOnly="@showCompletedOnly"
+    ShowIncompleteOnly="@showIncompleteOnly"
     ShowPrintedOnly="@showPrintedOnly"
+    ShowNotPrintedOnly="@showNotPrintedOnly"
     NewProduction="@newProduction"
     ProductionToDelete="@productionToDelete"
     RequestDelete="RequestDelete"
@@ -114,10 +137,12 @@
     private string selectedProductFilter = "";
 
     private bool showCompletedOnly;
+    private bool showIncompleteOnly;
     private bool showPrintedOnly;
+    private bool showNotPrintedOnly;
     private Production? productionToDelete;
     private List<int> selectedForPrintIds = new();
-
+    private bool showExcelLockedMessage;
     private List<Production> productions = new();
     private List<Product> products = new();
     private List<Product> allProducts = new();
@@ -125,7 +150,7 @@
     private Production? selectedProduction;
     private List<Inspector> inspectors = new();
     
-
+    private string ProductionExcelPath = "";
     
     private Production newProduction = new();
 
@@ -138,7 +163,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+        ProductionExcelPath =
+            Configuration["ExcelExport:ProductionPath"] ?? "";
+
+        Console.WriteLine($"EXCEL PATH = {ProductionExcelPath}");
+
         productions = await ProductionService.GetAllAsync();
         products = await ProductService.GetActiveAsync();
         allProducts = await ProductService.GetAllWithInactiveAsync();
@@ -174,6 +203,11 @@
                     IsPrinted = newProduction.IsPrinted
                 });
 
+            showExcelLockedMessage =
+                !ProductionExcelService.SaveExcelToFile(
+                    productions,
+                    ProductionExcelPath);
+
             newProduction = new Production
             {
                 BatchNo = savedBatchNo,
@@ -203,6 +237,11 @@
                 isEditMode = false;
             }
 
+            showExcelLockedMessage =
+                !ProductionExcelService.SaveExcelToFile(
+                    productions,
+                    ProductionExcelPath);
+
             newProduction = new Production();
         }
 
@@ -219,8 +258,10 @@
             filterDateTo = null;
 
             showCompletedOnly = false;
+            showIncompleteOnly = false;
 
             showPrintedOnly = false;
+            showNotPrintedOnly = false;
         }
 
     private Task OnFilterDateFromChanged(DateTime? value)
@@ -284,6 +325,11 @@
             await ProductionService.DeleteAsync(productionToDelete.Id);
 
             productions.RemoveAll(x => x.Id == productionToDelete.Id);
+
+            showExcelLockedMessage =
+                !ProductionExcelService.SaveExcelToFile(
+                    productions,
+                    ProductionExcelPath);
 
             productionToDelete = null;
         }

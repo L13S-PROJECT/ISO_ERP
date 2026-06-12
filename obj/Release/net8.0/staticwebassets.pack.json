@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO-512.png",
+      "PackagePath": "staticwebassets\\icons\\ISO_LOGO-512.png"
+    },
+    {
       "Id": "C:\\Projects\\ISO_ERP\\ISO_ERP\\wwwroot\\icons\\ISO_LOGO.png",
       "PackagePath": "staticwebassets\\icons\\ISO_LOGO.png"
     },

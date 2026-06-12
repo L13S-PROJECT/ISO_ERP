@@ -21,7 +21,7 @@ public static class ProductionProtocolPage1
             column.Item()
                 .AlignCenter()
                 .Text("Ražošanas kvalitātes kontroles protokols (FCP)")
-                .FontSize(20)
+                .FontSize(16)
                 .Bold();
         
             // DATE
@@ -76,7 +76,8 @@ public static class ProductionProtocolPage1
                     HeaderCell("Pabeigts");
                     HeaderCell("Pārbaudīja");
 
-                    ValueCell(production.BatchNo ?? "");
+                    // ValueCell(production.BatchNo ?? "");
+                    ValueCell("ABC123");
                     ValueCell(production.ProductCode ?? "");
                     ValueCell(production.Quantity.ToString());
                     ValueCell("");

@@ -5,6 +5,25 @@ namespace ISO_ERP.Services;
 
 public class ProductionExcelService
 {
+    public bool SaveExcelToFile(
+    List<Production> productions,
+    string filePath)
+            {
+                try
+                {
+                    var excelBytes = GenerateExcel(productions);
+
+                    File.WriteAllBytes(filePath, excelBytes);
+
+                    return true;
+                }
+                catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                        return false;
+                    }
+            }
+
     public byte[] GenerateExcel(List<Production> productions)
     {
         using var workbook = new XLWorkbook();
