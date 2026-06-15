@@ -13,6 +13,14 @@
         JAUNA PRECE
     </h2>
 
+    
+    @if (!string.IsNullOrWhiteSpace(validationMessage))
+        {
+            <div class="alert alert-danger">
+                @validationMessage
+            </div>
+        }
+
     <div class="form-row">
         <label>KATEGORIJA</label>
 
@@ -64,20 +72,116 @@
     <div class="details-container">
 
             <div class="details-title">
-                Detaļas
+                Detaļas 
             </div>
 
             <div class="details-list">
 
-                @foreach (var detail in details)
+                @foreach (var detail in details
+                    .OrderBy(x => detailDisplayOrders.GetValueOrDefault(x.Id, int.MaxValue))
+                    .ThenBy(x => x.Name))
                 {
-                    <div class="detail-item">
+                    <div class="detail-wrapper" @key="detail.Id">
 
-                        <input type="checkbox"
-                            checked="@selectedDetailIds.Contains(detail.Id)"
-                            @onchange="(e => OnDetailChanged(detail.Id, e))" />
+                        <div class="detail-item @(selectedDetailIds.Contains(detail.Id) ? "" : "inactive")">
 
-                        <span>@detail.Name</span>
+                            <div class="detail-order-container">
+                                @if (selectedDetailIds.Contains(detail.Id))
+                                {
+                                    <div class="detail-order">
+                                        @detailDisplayOrders.GetValueOrDefault(detail.Id, 0)
+                                    </div>
+                                }
+                            </div>
+
+                            <span>@detail.Name</span>
+
+                            <input type="checkbox"
+                                checked="@selectedDetailIds.Contains(detail.Id)"
+                                @onchange="(e => OnDetailChanged(detail.Id, e))" />
+
+                            @if (selectedDetailIds.Contains(detail.Id))
+                            {
+                                <div class="detail-move-container">
+                                    <button type="button"
+                                            class="detail-move-btn"
+                                            @onclick="() => MoveDetailUp(detail.Id)">
+                                        ↑
+                                    </button>
+
+                                    <button type="button"
+                                            class="detail-move-btn"
+                                            @onclick="() => MoveDetailDown(detail.Id)">
+                                        ↓
+                                    </button>
+                                </div>
+
+                                <button type="button"
+                                        @onclick="() => ToggleSubItems(detail.Id)"
+                                        class="detail-subitem-btn">
+                                    +
+                                </button>
+                            }
+                        </div>
+
+                        @if (selectedDetailIds.Contains(detail.Id))
+                        {
+                            <div class="detail-subitems">
+
+                                @if (expandedDetails.Contains(detail.Id))
+                                {   
+                                <input class="subitem-input"
+                                    placeholder="Apakšdetaļas nosaukums"
+                                    @bind="newSubItemNames[detail.Id]" />
+
+                                <button type="button"
+                                        class="subitem-add-btn"
+                                        @onclick="() => SaveSubItem(detail.Id)">
+                                    Pievienot
+                                </button>
+                                }
+
+                                @if (subItems.ContainsKey(detail.Id))
+                                {
+                                    <ul class="mt-2">
+                                        @foreach (var item in subItems[detail.Id])
+                                        {
+                                            <li class="subitem-row">
+
+                                            <span class="subitem-name">
+                                                @item.Name
+                                            </span>
+
+                                            <div class="subitem-move-container">
+
+                                                <button type="button"
+                                                        class="detail-move-btn"
+                                                        @onclick="() => MoveSubItemUp(detail.Id, item)">
+                                                    ↑
+                                                </button>
+
+                                                <button type="button"
+                                                        class="detail-move-btn"
+                                                        @onclick="() => MoveSubItemDown(detail.Id, item)">
+                                                    ↓
+                                                </button>
+
+                                            </div>
+
+                                            <button type="button"
+                                                    class="subitem-delete-btn"
+                                                    title="Dzēst"
+                                                    @onclick="() => RemoveSubItem(detail.Id, item)">
+                                                🗑
+                                            </button>
+
+                                        </li>
+                                        }
+                                    </ul>
+                                }
+
+                            </div>
+                        }
 
                     </div>
                 }
@@ -120,7 +224,13 @@
     private string productCode = string.Empty;
 
     private string? productNotes;
+
+    private HashSet<int> expandedDetails = new();
+    private Dictionary<int, string> newSubItemNames = new();
+    private Dictionary<int, List<TempSubItem>> subItems = new();
+    private Dictionary<int, int> detailDisplayOrders = new();
     private bool showSuccessMessage = false;
+    private string validationMessage = string.Empty;
     private List<Detail> details = new();
     private List<int> selectedDetailIds = new();
     private async Task Close()
@@ -135,8 +245,35 @@
         {
             details = await DetailService.GetAllAsync();
         }
+
     private async Task Save()
         {
+            validationMessage = string.Empty;
+
+            if (selectedCategoryId == null)
+                {
+                    validationMessage = "Izvēlieties kategoriju.";
+                    return;
+                }
+
+            if (string.IsNullOrWhiteSpace(productName))
+                {
+                    validationMessage = "Ievadiet preces nosaukumu.";
+                    return;
+                }
+
+            if (string.IsNullOrWhiteSpace(productCode))
+                {
+                    validationMessage = "Ievadiet preces kodu.";
+                    return;
+                }
+
+            if (selectedDetailIds.Count == 0)
+                {
+                    validationMessage = "Pievienojiet vismaz vienu detaļu.";
+                    return;
+                }
+
             if (selectedCategoryId == null)
                 return;
 
@@ -149,7 +286,31 @@
                 IsActive = true
             };
 
-            await ProductService.AddAsync(product, selectedDetailIds);
+            var productDetails = selectedDetailIds
+                .Select(detailId => new TempProductDetail
+                {
+                    DetailId = detailId,
+                    DisplayOrder = detailDisplayOrders.ContainsKey(detailId)
+                        ? detailDisplayOrders[detailId]
+                        : 0,
+                    SubItems = subItems.ContainsKey(detailId)
+                        ? subItems[detailId]
+                        : new List<TempSubItem>()
+                })
+                .ToList();
+
+            await ProductService.AddAsync(
+                    product,
+                    productDetails.Select(x => new ProductDetailCreateModel
+                    {
+                        DetailId = x.DetailId,
+                        DisplayOrder = x.DisplayOrder,
+                        SubItems = x.SubItems.Select(s => new ProductDetailSubItemCreateModel
+                        {
+                            Name = s.Name,
+                            DisplayOrder = s.DisplayOrder
+                        }).ToList()
+                    }).ToList());
 
             showSuccessMessage = true;
 
@@ -181,12 +342,179 @@
                 if (!selectedDetailIds.Contains(detailId))
                 {
                     selectedDetailIds.Add(detailId);
+
+
+                    if (!detailDisplayOrders.ContainsKey(detailId))
+                        {
+                            detailDisplayOrders[detailId] = selectedDetailIds.Count;
+                        }
+                    
+                    NormalizeDisplayOrders();
                 }
             }
             else
             {
                 selectedDetailIds.Remove(detailId);
+
+                detailDisplayOrders.Remove(detailId);
+
+                expandedDetails.Remove(detailId);
+
+                newSubItemNames.Remove(detailId);
+
+                subItems.Remove(detailId);
+                NormalizeDisplayOrders();
             }
         }
+
+    private void ToggleSubItems(int detailId)
+        {
+            if (expandedDetails.Contains(detailId))
+            {
+                expandedDetails.Remove(detailId);
+                return;
+            }
+
+            if (!newSubItemNames.ContainsKey(detailId))
+            {
+                newSubItemNames[detailId] = string.Empty;
+            }
+
+            expandedDetails.Add(detailId);
+        }
+    
+    private async Task SaveSubItem(int detailId)
+        {
+            if (!newSubItemNames.TryGetValue(detailId, out var name))
+                return;
+
+            if (string.IsNullOrWhiteSpace(name))
+                return;
+
+            if (!subItems.ContainsKey(detailId))
+                {
+                    subItems[detailId] = new List<TempSubItem>();
+                }
+
+            subItems[detailId].Add(new TempSubItem
+                {
+                    Name = name.Trim(),
+                    DisplayOrder = subItems[detailId].Count + 1
+                });
+
+            newSubItemNames[detailId] = string.Empty;
+
+            expandedDetails.Remove(detailId);
+        }
+
+        private void RemoveSubItem(int detailId, TempSubItem item)
+            {
+                if (!subItems.ContainsKey(detailId))
+                    return;
+
+                subItems[detailId].Remove(item);
+            }
+        
+        private class TempSubItem
+            {
+                public string Name { get; set; } = string.Empty;
+
+                public int DisplayOrder { get; set; } = 0;
+            }
+        
+        private class TempProductDetail
+            {
+                public int DetailId { get; set; }
+
+                public int DisplayOrder { get; set; }
+
+                public List<TempSubItem> SubItems { get; set; } = new();
+            }
+
+            private void NormalizeDisplayOrders()
+                {
+                    int order = 1;
+
+                    foreach (var detailId in selectedDetailIds
+                        .OrderBy(x => detailDisplayOrders.GetValueOrDefault(x, int.MaxValue)))
+                    {
+                        detailDisplayOrders[detailId] = order++;
+                    }
+                }
+
+private void MoveDetailUp(int detailId)
+{
+    var current = detailDisplayOrders.GetValueOrDefault(detailId);
+
+    var previous = detailDisplayOrders
+        .Where(x => x.Value < current)
+        .OrderByDescending(x => x.Value)
+        .FirstOrDefault();
+
+    if (previous.Key == 0)
+        return;
+
+    detailDisplayOrders[detailId] = previous.Value;
+    detailDisplayOrders[previous.Key] = current;
+}
+
+private void MoveDetailDown(int detailId)
+{
+    var current = detailDisplayOrders.GetValueOrDefault(detailId);
+
+    var next = detailDisplayOrders
+        .Where(x => x.Value > current)
+        .OrderBy(x => x.Value)
+        .FirstOrDefault();
+
+    if (next.Key == 0)
+        return;
+
+    detailDisplayOrders[detailId] = next.Value;
+    detailDisplayOrders[next.Key] = current;
+}
+
+private void MoveSubItemUp(int detailId, TempSubItem item)
+{
+    if (!subItems.ContainsKey(detailId))
+        return;
+
+    var list = subItems[detailId];
+
+    var index = list.FindIndex(x => ReferenceEquals(x, item));
+
+    if (index <= 0)
+        return;
+
+    (list[index - 1], list[index]) =
+        (list[index], list[index - 1]);
+
+    for (int i = 0; i < list.Count; i++)
+    {
+        list[i].DisplayOrder = i + 1;
+    }
+}
+
+private void MoveSubItemDown(int detailId, TempSubItem item)
+{
+    if (!subItems.ContainsKey(detailId))
+        return;
+
+    var list = subItems[detailId];
+
+    var index = list.FindIndex(x => ReferenceEquals(x, item));
+
+    if (index < 0 || index >= list.Count - 1)
+        return;
+
+    (list[index], list[index + 1]) =
+        (list[index + 1], list[index]);
+
+    for (int i = 0; i < list.Count; i++)
+    {
+        list[i].DisplayOrder = i + 1;
+    }
+}
+        
 
 }

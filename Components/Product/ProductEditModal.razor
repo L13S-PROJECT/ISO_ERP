@@ -70,15 +70,112 @@
 
             <div class="details-list">
 
-                @foreach (var detail in details)
+                @foreach (var detail in details
+                    .OrderBy(x => detailDisplayOrders.GetValueOrDefault(x.Id, int.MaxValue))
+                    .ThenBy(x => x.Name))
                 {
-                    <div class="detail-item">
+                    <div class="detail-wrapper" @key="detail.Id">
 
-                        <input type="checkbox"
-                            checked="@selectedDetailIds.Contains(detail.Id)"
-                            @onchange="(e => OnDetailChanged(detail.Id, e))" />
+                        <div class="detail-item @(selectedDetailIds.Contains(detail.Id) ? "" : "inactive")">
 
-                        <span>@detail.Name</span>
+                            <div class="detail-order-container">
+                                @if (selectedDetailIds.Contains(detail.Id))
+                                {
+                                    <div class="detail-order">
+                                        @detailDisplayOrders.GetValueOrDefault(detail.Id, 0)
+                                    </div>
+                                }
+                            </div>
+
+                            <span>@detail.Name</span>
+
+                            <input type="checkbox"
+                                checked="@selectedDetailIds.Contains(detail.Id)"
+                                @onchange="(e => OnDetailChanged(detail.Id, e))" />
+
+                            @if (selectedDetailIds.Contains(detail.Id))
+                            {
+                                <div class="detail-move-container">
+                                    <button type="button"
+                                            class="detail-move-btn"
+                                            @onclick="() => MoveDetailUp(detail.Id)">
+                                        ↑
+                                    </button>
+
+                                    <button type="button"
+                                            class="detail-move-btn"
+                                            @onclick="() => MoveDetailDown(detail.Id)">
+                                        ↓
+                                    </button>
+                                </div>
+
+                                <button type="button"
+                                        @onclick="() => ToggleSubItems(detail.Id)"
+                                        class="detail-subitem-btn">
+                                    +
+                                </button>
+                            }
+
+                        </div>
+
+                        @if (selectedDetailIds.Contains(detail.Id))
+                        {
+                            <div class="detail-subitems">
+                               @if (expandedDetails.Contains(detail.Id))
+                                {         
+                                <input class="subitem-input"
+                                    placeholder="Apakšdetaļas nosaukums"
+                                    @bind="newSubItemNames[detail.Id]" />
+
+                                <button type="button"
+                                        class="subitem-add-btn"
+                                        @onclick="() => AddSubItem(detail.Id)">
+                                    Pievienot
+                                </button>
+                                }
+                                @if (subItems.ContainsKey(detail.Id))
+                                {
+                                    <ul>
+                                        @foreach (var item in subItems[detail.Id]
+                                            .OrderBy(x => x.DisplayOrder)
+                                            .ThenBy(x => x.Name))
+                                        {
+                                            <li class="subitem-row">
+
+                                                <span class="subitem-name">
+                                                    @item.Name
+                                                </span>
+
+                                                <div class="subitem-move-container">
+
+                                                    <button type="button"
+                                                            class="detail-move-btn"
+                                                            @onclick="() => MoveSubItemUp(detail.Id, item)">
+                                                        ↑
+                                                    </button>
+
+                                                    <button type="button"
+                                                            class="detail-move-btn"
+                                                            @onclick="() => MoveSubItemDown(detail.Id, item)">
+                                                        ↓
+                                                    </button>
+
+                                                </div>
+
+                                                <button type="button"
+                                                        class="subitem-delete-btn"
+                                                        title="Dzēst"
+                                                        @onclick="() => DeleteSubItem(item)">
+                                                    🗑
+                                                </button>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+
+                            </div>
+                        }
 
                     </div>
                 }
@@ -122,11 +219,14 @@
     private string productName = string.Empty;
 
     private string productCode = string.Empty;
-
+    private HashSet<int> expandedDetails = new();
     private string? productNotes;
     private bool showSuccessMessage = false;
     private List<Detail> details = new();
     private List<int> selectedDetailIds = new();
+    private Dictionary<int, int> detailDisplayOrders = new();
+    private Dictionary<int, List<ProductDetailSubItem>> subItems = new();
+    private Dictionary<int, string> newSubItemNames = new();
     private async Task Close()
     {
         await OnClose.InvokeAsync();
@@ -141,7 +241,7 @@
 
             var product = await ProductService.GetByIdAsync(ProductId);
 
-            if (product == null)
+           if (product == null)
                 return;
 
             selectedCategoryId = product.CategoryId;
@@ -155,6 +255,28 @@
             selectedDetailIds = product.ProductDetails
                 .Select(x => x.DetailId)
                 .ToList();
+
+            foreach (var detailId in selectedDetailIds)
+                {
+                    if (!newSubItemNames.ContainsKey(detailId))
+                    {
+                        newSubItemNames[detailId] = string.Empty;
+                    }
+                }
+
+            subItems = product.ProductDetails
+                .ToDictionary(
+                    x => x.DetailId,
+                    x => x.SubItems.ToList());
+            
+            expandedDetails = new HashSet<int>();
+            
+            detailDisplayOrders = product.ProductDetails
+                .ToDictionary(
+                    x => x.DetailId,
+                    x => x.DisplayOrder);
+
+            NormalizeDisplayOrders();
         }
 
     private async Task Save()
@@ -172,7 +294,22 @@
                 IsActive = true
             };
 
-            await ProductService.UpdateAsync(product, selectedDetailIds);
+            await ProductService.UpdateAsync(
+                product,
+                selectedDetailIds.Select(detailId => new ProductDetailCreateModel
+                {
+                    DetailId = detailId,
+                    DisplayOrder = detailDisplayOrders.GetValueOrDefault(detailId, 0),
+                    SubItems = subItems.ContainsKey(detailId)
+                        ? subItems[detailId]
+                            .Select(x => new ProductDetailSubItemCreateModel
+                            {
+                                Name = x.Name,
+                                DisplayOrder = x.DisplayOrder
+                            })
+                            .ToList()
+                        : new List<ProductDetailSubItemCreateModel>()
+                }).ToList());
 
             showSuccessMessage = true;
 
@@ -181,6 +318,39 @@
             await Task.Delay(500);
 
             await OnClose.InvokeAsync();
+        }
+    
+    private async Task SaveWithoutClose()
+        {
+            if (selectedCategoryId == null)
+                return;
+
+            var product = new Product
+            {
+                Id = ProductId,
+                Name = productName,
+                Code = productCode,
+                Notes = productNotes,
+                CategoryId = selectedCategoryId.Value,
+                IsActive = true
+            };
+
+            await ProductService.UpdateAsync(
+                product,
+                selectedDetailIds.Select(detailId => new ProductDetailCreateModel
+                {
+                    DetailId = detailId,
+                    DisplayOrder = detailDisplayOrders.GetValueOrDefault(detailId, 0),
+                    SubItems = subItems.ContainsKey(detailId)
+                        ? subItems[detailId]
+                            .Select(x => new ProductDetailSubItemCreateModel
+                            {
+                                Name = x.Name,
+                                DisplayOrder = x.DisplayOrder
+                            })
+                            .ToList()
+                        : new List<ProductDetailSubItemCreateModel>()
+                }).ToList());
         }
     
     private void OnCategoryChanged(ChangeEventArgs e)
@@ -204,12 +374,217 @@
                 if (!selectedDetailIds.Contains(detailId))
                 {
                     selectedDetailIds.Add(detailId);
+
+                    if (!detailDisplayOrders.ContainsKey(detailId))
+                        {
+                            detailDisplayOrders[detailId] =
+                                detailDisplayOrders.Count == 0
+                                    ? 1
+                                    : detailDisplayOrders.Values.Max() + 1;
+                        }
                 }
             }
             else
-            {
-                selectedDetailIds.Remove(detailId);
-            }
+                {
+                    selectedDetailIds.Remove(detailId);
+
+                    detailDisplayOrders.Remove(detailId);
+
+                    expandedDetails.Remove(detailId);
+
+                    newSubItemNames.Remove(detailId);
+                }
+                
+            NormalizeDisplayOrders();
         }
+
+        private void ToggleSubItems(int detailId)
+                {
+                    if (expandedDetails.Contains(detailId))
+                    {
+                        expandedDetails.Remove(detailId);
+                        return;
+                    }
+
+                    if (!newSubItemNames.ContainsKey(detailId))
+                    {
+                        newSubItemNames[detailId] = string.Empty;
+                    }
+
+                    expandedDetails.Add(detailId);
+                }
+
+        private async Task DeleteSubItem(ProductDetailSubItem item)
+                {
+                    await ProductService.DeleteSubItemAsync(item.Id);
+
+                    foreach (var list in subItems.Values)
+                    {
+                        list.Remove(item);
+                    }
+
+                    foreach (var list in subItems.Values)
+                    {
+                        int order = 1;
+
+                        foreach (var subItem in list
+                            .OrderBy(x => x.DisplayOrder)
+                            .ThenBy(x => x.Name))
+                        {
+                            subItem.DisplayOrder = order++;
+                        }
+                    }
+
+                    StateHasChanged();
+                }
+            
+        private async Task AddSubItem(int detailId)
+            {
+                if (!newSubItemNames.TryGetValue(detailId, out var name))
+                    return;
+
+                if (string.IsNullOrWhiteSpace(name))
+                    return;
+
+                var product = await ProductService.GetByIdAsync(ProductId);
+
+                var productDetail = product?.ProductDetails
+                    .FirstOrDefault(x => x.DetailId == detailId);
+
+                if (productDetail == null)
+                {
+                    await SaveWithoutClose();
+
+                    product = await ProductService.GetByIdAsync(ProductId);
+
+                    productDetail = product?.ProductDetails
+                        .FirstOrDefault(x => x.DetailId == detailId);
+
+                    if (productDetail == null)
+                        return;
+                }
+
+                await ProductService.AddSubItemAsync(productDetail.Id, name);
+
+                var createdProduct = await ProductService.GetByIdAsync(ProductId);
+
+                subItems[detailId] = createdProduct?
+                    .ProductDetails
+                    .First(x => x.DetailId == detailId)
+                    .SubItems
+                    .ToList() ?? new List<ProductDetailSubItem>();
+
+                newSubItemNames[detailId] = string.Empty;
+
+                expandedDetails.Remove(detailId);
+
+                StateHasChanged();
+            }
+
+private void NormalizeDisplayOrders()
+{
+    int order = 1;
+
+    foreach (var detailId in selectedDetailIds
+        .OrderBy(x => detailDisplayOrders.GetValueOrDefault(x, int.MaxValue)))
+    {
+        detailDisplayOrders[detailId] = order++;
+    }
+}
+
+private void MoveDetailUp(int detailId)
+{
+    var current = detailDisplayOrders.GetValueOrDefault(detailId);
+
+    var previous = detailDisplayOrders
+        .Where(x => x.Value < current)
+        .OrderByDescending(x => x.Value)
+        .FirstOrDefault();
+
+    if (previous.Key == 0)
+        return;
+
+    detailDisplayOrders[detailId] = previous.Value;
+    detailDisplayOrders[previous.Key] = current;
+
+    NormalizeDisplayOrders();
+}
+
+private void MoveDetailDown(int detailId)
+{
+    var current = detailDisplayOrders.GetValueOrDefault(detailId);
+
+    var next = detailDisplayOrders
+        .Where(x => x.Value > current)
+        .OrderBy(x => x.Value)
+        .FirstOrDefault();
+
+    if (next.Key == 0)
+        return;
+
+    detailDisplayOrders[detailId] = next.Value;
+    detailDisplayOrders[next.Key] = current;
+
+    NormalizeDisplayOrders();
+}
+
+private void MoveSubItemUp(int detailId, ProductDetailSubItem item)
+{
+    if (!subItems.ContainsKey(detailId))
+        return;
+
+    var list = subItems[detailId]
+        .OrderBy(x => x.DisplayOrder)
+        .ToList();
+
+    var index = list.IndexOf(item);
+
+    if (index <= 0)
+        return;
+
+    var previous = list[index - 1];
+
+    (item.DisplayOrder, previous.DisplayOrder) =
+        (previous.DisplayOrder, item.DisplayOrder);
+    
+    int order = 1;
+
+    foreach (var subItem in subItems[detailId]
+        .OrderBy(x => x.DisplayOrder)
+        .ThenBy(x => x.Name))
+    {
+        subItem.DisplayOrder = order++;
+    }
+
+}
+
+private void MoveSubItemDown(int detailId, ProductDetailSubItem item)
+{
+    if (!subItems.ContainsKey(detailId))
+        return;
+
+    var list = subItems[detailId]
+        .OrderBy(x => x.DisplayOrder)
+        .ToList();
+
+    var index = list.IndexOf(item);
+
+    if (index < 0 || index >= list.Count - 1)
+        return;
+
+    var next = list[index + 1];
+
+    (item.DisplayOrder, next.DisplayOrder) =
+        (next.DisplayOrder, item.DisplayOrder);
+    
+    int order = 1;
+
+    foreach (var subItem in subItems[detailId]
+        .OrderBy(x => x.DisplayOrder)
+        .ThenBy(x => x.Name))
+    {
+        subItem.DisplayOrder = order++;
+    }
+}
 
 }

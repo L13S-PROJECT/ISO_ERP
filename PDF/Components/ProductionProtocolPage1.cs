@@ -148,7 +148,9 @@ public static class ProductionProtocolPage1
                     HeaderCell("Paraksts");
                     HeaderCell("Piezīmes");
 
-                    var detailRows = product?.ProductDetails ?? new();
+                    var detailRows = product?.ProductDetails
+                        .OrderBy(x => x.DisplayOrder)
+                        .ToList() ?? new();
 
                         for (int i = 0; i < 7; i++)
                         {
@@ -192,7 +194,7 @@ public static class ProductionProtocolPage1
                 {
                     table.ColumnsDefinition(columns =>
                     {
-                        columns.ConstantColumn(35);
+                        columns.ConstantColumn(25);
                         columns.RelativeColumn(1.3f);
                         columns.RelativeColumn(2.2f);
                         columns.RelativeColumn(1.4f);
@@ -219,31 +221,71 @@ public static class ProductionProtocolPage1
                     HeaderCell("Pabeigts");
                     HeaderCell("Paraksts");
 
-                    var detailRows = product?.ProductDetails ?? new();
+                    var detailRows = product?.ProductDetails
+                        .OrderBy(x => x.DisplayOrder)
+                        .ToList() ?? new();
 
+                    var rows = new List<(string Number, string Name)>();
 
-                                for (int i = 0; i < detailRows.Count; i++)
-                                {
-                                    var detail = detailRows[i];
+                    int detailNumber = 1;
 
-                                    void StyledCell(string text = "")
+                    foreach (var detail in detailRows)
+                    {
+                        rows.Add((
+                            detailNumber.ToString(),
+                            detail.Detail?.Name ?? ""
+                        ));
+
+                        foreach (var subItem in detail.SubItems
+                            .OrderBy(x => x.DisplayOrder))
+                        {
+                            rows.Add((
+                                "",
+                                "      " + subItem.Name
+                            ));
+                        }
+
+                        detailNumber++;
+                    }
+
+                    bool compactMode = rows.Count > 8;
+
+                                for (int i = 0; i < rows.Count; i++)
                                     {
-                                        table.Cell()
-                                            .Border(1)
-                                            .MinHeight(24)
-                                            .Padding(4)
-                                            .AlignMiddle()
-                                            .Text(text)
-                                            .FontSize(9);
-                                    }
+                                        var row = rows[i];
 
-                                    StyledCell((i + 1).ToString());
-                                    StyledCell(detail?.Detail?.Name ?? "");
-                                    StyledCell();
-                                    StyledCell();
-                                    StyledCell();
-                                    StyledCell();
-                                }
+                                        void StyledCell(string text = "", bool center = false, bool bold = false)
+                                            {
+                                                var cell = table.Cell()
+                                                    .Border(1)
+                                                    .MinHeight(compactMode ? 18 : 24)
+                                                    .Padding(compactMode ? 2 : 4)
+                                                    .AlignMiddle();
+
+                                                if (center)
+                                                    cell = cell.AlignCenter();
+
+                                                var textStyle = cell.Text(text);
+
+                                                if (bold)
+                                                    textStyle = textStyle
+                                                        .Bold()
+                                                        .FontSize(compactMode ? 9 : 10);
+
+                                                else
+                                                    textStyle = textStyle
+                                                        .FontSize(compactMode ? 8 : 9);
+                                            }
+
+                                        var isMainDetail = !string.IsNullOrWhiteSpace(row.Number);
+
+                                        StyledCell(row.Number, true);
+                                        StyledCell(row.Name, bold: isMainDetail);
+                                        StyledCell();
+                                        StyledCell();
+                                        StyledCell();
+                                        StyledCell();
+                                    }
                         
                 });
 

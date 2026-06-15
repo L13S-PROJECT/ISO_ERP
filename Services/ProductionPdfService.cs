@@ -17,6 +17,8 @@ public class ProductionPdfService
         var products = await context.Products
             .Include(x => x.ProductDetails)
                 .ThenInclude(x => x.Detail)
+            .Include(x => x.ProductDetails)
+                .ThenInclude(x => x.SubItems)
             .ToListAsync();
 
         var documents = new List<QuestPDF.Infrastructure.IDocument>();
@@ -32,10 +34,11 @@ foreach (var production in productions)
             product));
 }
 
-// var mergedDocument = Document.Merge(documents);
+var mergedDocument = Document.Merge(documents);
 
-// return mergedDocument.GeneratePdf();
-return documents[0].GeneratePdf();
+return mergedDocument.GeneratePdf();
+
+// return documents[0].GeneratePdf();
 
     }
 

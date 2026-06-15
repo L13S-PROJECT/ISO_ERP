@@ -11,5 +11,7 @@ namespace ISO_ERP.Models
         public int DetailId { get; set; }
 
         public Detail? Detail { get; set; }
+        public int DisplayOrder { get; set; } = 0;
+        public List<ProductDetailSubItem> SubItems { get; set; } = new();
     }
 }
