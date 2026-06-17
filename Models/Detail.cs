@@ -1,3 +1,5 @@
+using ISO_ERP.Models.Enums;
+
 namespace ISO_ERP.Models
 {
     public class Detail
@@ -7,6 +9,8 @@ namespace ISO_ERP.Models
         public string Name { get; set; } = string.Empty;
 
         public string? Notes { get; set; }
+        
+        public DetailType Type { get; set; } = DetailType.Normal;
 
         public bool IsActive { get; set; } = true;
 

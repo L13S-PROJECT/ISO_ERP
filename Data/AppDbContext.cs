@@ -23,6 +23,10 @@ namespace ISO_ERP.Data
             {
                 base.OnModelCreating(modelBuilder);
 
+                modelBuilder.Entity<Detail>()
+                    .Property(x => x.Type)
+                    .HasConversion<int>();
+
                 modelBuilder.Entity<ProductDetail>()
                     .HasMany(x => x.SubItems)
                     .WithOne(x => x.ProductDetail)

@@ -2,6 +2,7 @@ using ISO_ERP.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using ISO_ERP.Models.Enums;
 
 namespace ISO_ERP.PDF.Components;
 
@@ -149,6 +150,8 @@ public static class ProductionProtocolPage1
                     HeaderCell("Piezīmes");
 
                     var detailRows = product?.ProductDetails
+                        .Where(x => x.Detail != null &&
+                                    x.Detail.Type == DetailType.Normal)
                         .OrderBy(x => x.DisplayOrder)
                         .ToList() ?? new();
 
